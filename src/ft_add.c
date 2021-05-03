@@ -43,7 +43,7 @@ char	**ft_crttkn_from_list(t_list *list)
 	size_t	i;
 
 	size = ft_lstsize(list);
-	tokens = (char**)malloc(sizeof(char*) * size);
+	tokens = (char**)malloc(sizeof(char*) * (size + 1));
 	if (!tokens)
 		return (0);		//write error
 	i = 0;
@@ -51,7 +51,10 @@ char	**ft_crttkn_from_list(t_list *list)
 	{
 		tokens[i] = ft_strdup(list->content);
 		if (!tokens[i])
+		{
+			printf("ERRRRRRRRRRRRRRRRRRRROR\n");
 			return (0);	//write error
+		}
 		list = list->next;
 		i++;
 	}

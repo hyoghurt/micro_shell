@@ -53,5 +53,6 @@ t_cmd	*ft_cmdnew(char **token);
 void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new);
 void	ft_free_char(void *s);
 char	**ft_crttkn_from_list(t_list *list);
+void	ft_cmdclear(t_cmd **cmd);
 
 #endif

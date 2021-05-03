@@ -2,6 +2,7 @@
 
 void	ft_exit_token(t_list **list)
 {
+	printf("exiiiiiiiiiit_tokkkkkkkkkkkkken\n");
 	ft_lstclear(list, ft_free_char);
 	ft_exit("error");
 }
@@ -82,6 +83,8 @@ int		ft_crtlst(t_list **list)
 		//	ft_int_file(list);
 		if (!ft_strchr(" \t\n", *shell.line))
 			ft_new_token(list, 0);
+		if (!*shell.line)
+			break ;
 		if (*shell.line == '|')
 		{
 			shell.line++;
