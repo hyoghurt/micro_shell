@@ -17,7 +17,6 @@ void	ft_free_bi(char **s)
 	i = 0;
 	while (s[i])
 	{
-		printf("token_0=%ld\n", i);
 		free(s[i]);
 		i++;
 	}
@@ -34,12 +33,11 @@ void	ft_cmdclear(t_cmd **cmd)
 	{
 		tmp = *cmd;
 		*cmd = (*cmd)->next;
-		printf("start_free_bi\n");
 		ft_free_bi(tmp->token);
-		printf("finish_free_bi\n");
 		free(tmp);
 		tmp = 0;
 	}
+	*cmd = 0;
 }
 
 void	ft_free_shell(void)
@@ -54,6 +52,8 @@ void	ft_free_shell(void)
 		free(shell.inp_file);
 	if (shell.err_file)
 		free(shell.err_file);
+	if (shell.set)
+		ft_free_bi(shell.set);
 }
 
 int		ft_exit(char *s)

@@ -1,22 +1,18 @@
 
 
-сделать перевод каретки при удалении не в первой строке
-сделать чтобы каретка не пропадала при достижении конца строки
-
-
+key backspace
 key up and down
 key C-C
 key C-D
 key C-\
 
-;			- next cmd
-execute		- func
+;		- next cmd
+$		- env
+<		- redirect
+>		- redirect
+>>		- redirect
+сделать что типо не конец сроки если " и т.д.
 
 
+checknut
 echo \$PWD
-
-
-
-
-bonus
-сделать редактор стоки (кнопка backsp и стрелки)

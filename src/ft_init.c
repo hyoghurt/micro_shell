@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-int	ft_set_prompt(void)
-{
-	char	*user;
-
-	//user = getenv("USER");
-	user = "USER";
-	write (1, "\033[1;48;5;58m", strlen("\033[1;48;5;58m"));
-	if (user)
-		write (1, user, strlen(user));
-	write (1, " > ", 3);
-	write (1, "\033[0m", strlen("\033[0m"));
-	return (0);
-}
-
 int	ft_init_termtype(void)
 {
 	struct termios	temp;
@@ -66,4 +52,31 @@ void	ft_init_struct(void)
 	shell.out_file = 0;
 	shell.inp_file = 0;
 	shell.err_file = 0;
+	shell.status = 0;
+	shell.set = 0;
+}
+
+void	ft_init_set(char **envp)
+{
+	size_t	size;
+	char	**set;
+
+	size = 0;
+	if (envp)
+		size = ft_array_len(envp);
+	set = (char**)malloc((size + 1) * sizeof(char*));
+	if (!set)
+		ft_exit("error");
+	shell.set = ft_cpy_array_bi(set, envp);
+	if (!shell.set)
+		ft_exit("error");
+}
+
+void	ft_init(char **envp)
+{
+	signal(SIGINT, ft_sigfunc);
+
+	ft_init_struct();
+	ft_init_termios();
+	ft_init_set(envp);
 }
