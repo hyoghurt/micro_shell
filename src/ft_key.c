@@ -1,7 +1,17 @@
 #include "minishell.h"
 
-char	*ft_key_up(char *line, char *up)
+void	ft_key_up(char *line, char *up)
 {
+	char	*cl_row;
+	size_t	i;
+	char	*tmp;
+
+	cl_row = tgetstr("dl", 0);
+	tputs(cl_row, 1, ft_putint);
+
+	ft_cache_bi(shell.line);
+
+	ft_set_prompt();
 	//char	*down;
 	//down	= tgetstr("do", 0);
 	//char *kd = tgetstr("kd", 0);
@@ -12,14 +22,19 @@ char	*ft_key_up(char *line, char *up)
 	//	write (1, "DO", 2);
 }
 
-char	*ft_key_backsp(char *line)
+void	ft_key_backsp(void)
 {
 	char	*dc;
+	size_t	i;
 
 	dc = tgetstr("dc", 0);
 
 	tputs("\b", 1, ft_putint);
+	//shell.line
 	tputs(	dc, 1, ft_putint);
+
+	i = ft_strlen(shell.line);
+	shell.line[i - 1] = '\0';
 }
 
 //	char	*right	= tgetstr("nd", 0);
@@ -30,5 +45,3 @@ char	*ft_key_backsp(char *line)
 //	write (1, buf, 2);
 //else if (strcmp(buf, right) == 0)		//key right
 //	write (1, "RG", 2);
-//else if (buf[0] == '\004')				//key C-D
-//	write (1, "C-D", 3);

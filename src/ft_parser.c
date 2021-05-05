@@ -63,14 +63,14 @@ char	*ft_strfile(void)
 	}
 }
 
-void	ft_int_file(t_list **list)
+void	ft_in_file(t_list **list)
 {
 	char	*file;
 
 	file = ft_strfile();
 	if (!file)
 		ft_exit_token(list);
-	shell.inp_file = file;
+	shell.in_file = file;
 }
 
 int		ft_crtlst(t_list **list)

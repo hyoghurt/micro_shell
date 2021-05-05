@@ -1,12 +1,7 @@
 #include "minishell.h"
 
-void	ft_sigfunc(int sig)
+void	ft_sig_ctrl_c(int sig)
 {
-	if (sig != SIGINT)
-		write (1, "no_sig", 6);
-	else
-	{
-		write (1, "[SIGINT]\n", 9);
-	}
-	exit (0);
+	write (1, "\n", 1);
+	ft_set_prompt();
 }

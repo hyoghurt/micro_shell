@@ -1,6 +1,4 @@
 #include "minishell.h"
-#include <sys/wait.h>
-#include <sys/stat.h>
 
 char	*ft_str_path(char **path)
 {
@@ -65,6 +63,7 @@ char	*ft_pathname(t_list **list)
 		}
 		path_list = path_list->next;
 	}
+	ft_lstclear(list, ft_free_char);
 	return (0);
 }
 

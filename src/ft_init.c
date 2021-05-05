@@ -50,10 +50,11 @@ void	ft_init_struct(void)
 	shell.line = 0;
 	shell.cmd_table = 0;
 	shell.out_file = 0;
-	shell.inp_file = 0;
+	shell.in_file = 0;
 	shell.err_file = 0;
 	shell.status = 0;
 	shell.set = 0;
+	shell.pathtkn = 0;
 }
 
 void	ft_init_set(char **envp)
@@ -74,7 +75,7 @@ void	ft_init_set(char **envp)
 
 void	ft_init(char **envp)
 {
-	signal(SIGINT, ft_sigfunc);
+	signal(SIGINT, ft_sig_ctrl_c);
 
 	ft_init_struct();
 	ft_init_termios();

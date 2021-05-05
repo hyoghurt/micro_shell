@@ -48,12 +48,14 @@ void	ft_free_shell(void)
 		ft_cmdclear(&shell.cmd_table);
 	if (shell.out_file)
 		free(shell.out_file);
-	if (shell.inp_file)
-		free(shell.inp_file);
+	if (shell.in_file)
+		free(shell.in_file);
 	if (shell.err_file)
 		free(shell.err_file);
 	if (shell.set)
 		ft_free_bi(shell.set);
+	if (shell.pathtkn)
+		free(shell.pathtkn);
 }
 
 int		ft_exit(char *s)

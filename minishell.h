@@ -1,6 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# define BUF_SIZE 256
+# define BUF_SIZE 16
 
 # include "libft.h"
 # include <stdio.h>
@@ -12,6 +12,9 @@
 # include <ncurses.h>
 # include <term.h>
 # include <signal.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <sys/stat.h>
 
 typedef struct		s_cmd
 {
@@ -28,10 +31,11 @@ typedef struct		s_shell
 	t_cmd			*cmd_table;
 
 	char			*out_file;
-	char			*inp_file;
+	char			*in_file;
 	char			*err_file;
 	int				status;			//status exit
 	char			**set;
+	char			*pathtkn;
 }					t_shell;
 
 t_shell	shell;
@@ -41,15 +45,15 @@ int		ft_set_prompt(void);
 int		ft_init_termtype(void);
 int		ft_init_termios(void);
 void	ft_init_struct(void);
-char	*ft_read(void);
+void	ft_read(void);
 int		ft_putint(int c);
 int		ft_print_error(void);
 int		ft_exit(char *s);
 void	ft_parser(void);
 void	ft_executor(void);
-void	ft_sigfunc(int sig);
-char	*ft_key_up(char *line, char *up);
-char	*ft_key_backsp(char *line); 
+void	ft_sig_ctrl_c(int sig);
+void	ft_key_up(char *line, char *up);
+void	ft_key_backsp(void); 
 t_cmd	*ft_cmdnew(char **token);
 void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new);
 void	ft_free_char(void *s);
@@ -60,5 +64,8 @@ size_t	ft_array_len(char **envp);
 char	**ft_cpy_array_bi(char **s1, char **s2);
 char	*ft_getset(char *str);
 char	*ft_path_token(void);
+void	ft_cache_bi(char *line);
+void	ft_create_child_process(void);
+void	ft_execve(void);
 
 #endif
