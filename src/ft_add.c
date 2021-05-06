@@ -74,11 +74,6 @@ void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new)
 	}
 }
 
-void	ft_free_char(void *s)
-{
-	free(s);
-}
-
 char	**ft_crttkn_from_list(t_list *list)
 {
 	size_t	size;
@@ -88,15 +83,15 @@ char	**ft_crttkn_from_list(t_list *list)
 	size = ft_lstsize(list);
 	tokens = (char**)malloc(sizeof(char*) * (size + 1));
 	if (!tokens)
-		return (0);		//write error
+		return (0);
 	i = 0;
 	while (i < size)
 	{
 		tokens[i] = ft_strdup(list->content);
 		if (!tokens[i])
 		{
-			printf("ERRRRRRRRRRRRRRRRRRRROR\n");
-			return (0);	//write error
+			ft_free_bi(tokens);
+			return (0);
 		}
 		list = list->next;
 		i++;

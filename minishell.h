@@ -42,13 +42,10 @@ t_shell	shell;
 
 void	ft_free_bi(char **s);
 int		ft_set_prompt(void);
-int		ft_init_termtype(void);
-int		ft_init_termios(void);
-void	ft_init_struct(void);
 void	ft_read(void);
 int		ft_putint(int c);
 int		ft_print_error(void);
-int		ft_exit(char *s);
+int		ft_exit(char *msg, char *s);
 void	ft_parser(void);
 void	ft_executor(void);
 void	ft_sig_ctrl_c(int sig);
@@ -63,9 +60,7 @@ void	ft_init(char **envp);
 size_t	ft_array_len(char **envp);
 char	**ft_cpy_array_bi(char **s1, char **s2);
 char	*ft_getset(char *str);
-char	*ft_path_token(void);
+char	*ft_path_token(t_cmd *cmd);
 void	ft_cache_bi(char *line);
-void	ft_create_child_process(void);
-void	ft_execve(void);
 
 #endif

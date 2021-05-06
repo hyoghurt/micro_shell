@@ -21,14 +21,13 @@ void	ft_free_bi(char **s)
 		i++;
 	}
 	free(s);
+	*s = 0;
 }
 
 void	ft_cmdclear(t_cmd **cmd)
 {
 	t_cmd	*tmp;
-	int		i;
 
-	i = 0;
 	while (*cmd)
 	{
 		tmp = *cmd;
@@ -37,7 +36,6 @@ void	ft_cmdclear(t_cmd **cmd)
 		free(tmp);
 		tmp = 0;
 	}
-	*cmd = 0;
 }
 
 void	ft_free_shell(void)
@@ -58,12 +56,17 @@ void	ft_free_shell(void)
 		free(shell.pathtkn);
 }
 
-int		ft_exit(char *s)
+int		ft_exit(char *msg, char *s)
 {
 	int	ret;
 
-	ft_free_shell();
 	ret = 0;
+	ft_free_shell();
+	if (msg)
+	{
+		write (2, msg, ft_strlen(msg));
+		write (2, ": ", 2);
+	}
 	if (s)
 	{
 		ret = ft_print_error();
