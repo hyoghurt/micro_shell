@@ -19,12 +19,12 @@ char	*ft_path_token(t_cmd *cmd)
 	}
 	path = ft_getset("PATH");
 	if (!path)
-		ft_exit("error");	//write
+		printf("dopisat exit\n");
 
 	path_list = ft_crt_path_list(path, cmd);
 	free(path);
 	if (!path_list)
-		ft_exit("error");	//write
+		printf("dopisat exit\n");
 
 	return (ft_pathname(&path_list));
 }
@@ -44,11 +44,11 @@ t_list	*ft_crt_path_list(char *path, t_cmd *cmd)
 
 		str = ft_str_path(&path, cmd);
 		if (!str)
-			ft_exit("error");	//write errror
+			printf("dopisat exit\n");
 
 		new = ft_lstnew(str);
 		if (!new)
-			ft_exit("error");	//write error
+			printf("dopisat exit\n");
 
 		ft_lstadd_back(&result, new);
 	}

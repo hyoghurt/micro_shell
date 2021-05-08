@@ -1,47 +1,50 @@
 #include "minishell.h"
 
-void	ft_key_up(char *line, char *up)
+void	ft_key_up(void)
 {
-	char	*cl_row;
-	size_t	i;
-	char	*tmp;
+	if (shell.flag_up)
+	{
+		free(shell.move_story->str);
+		shell.move_story->str = shell.line;
+	}
 
-	cl_row = tgetstr("dl", 0);
-	tputs(cl_row, 1, ft_putint);
+	tputs(shell.dl, 1, ft_putint);		//clear line
+	ft_set_prompt();					//set prompt
 
-	ft_cache_bi(shell.line);
+	shell.flag_up = 1;
+	if (shell.move_story->next)
+		shell.move_story = shell.move_story->next;
+	shell.line = ft_strdup(shell.move_story->str);
 
-	ft_set_prompt();
-	//char	*down;
-	//down	= tgetstr("do", 0);
-	//char *kd = tgetstr("kd", 0);
-	
-	//if (strcmp(buf, up) == 0)		//key UP
-	//	write (1, "UP", 2);
-	//else if (strcmp(buf, kd) == 0)	//else if (buf[0] == '\n') //else if (strcmp(buf, "\033[B") == 0)
-	//	write (1, "DO", 2);
+	ft_putstr_fd(shell.line, 1);
+}
+
+void	ft_key_down(void)
+{
+	if (shell.flag_up)
+	{
+		free(shell.move_story->str);
+		shell.move_story->str = shell.line;
+	}
+
+	tputs(shell.dl, 1, ft_putint);		//clear line
+	ft_set_prompt();					//set prompt
+
+	shell.flag_up = 1;
+	if (shell.move_story->back)
+		shell.move_story = shell.move_story->back;
+	shell.line = ft_strdup(shell.move_story->str);
+
+	ft_putstr_fd(shell.line, 1);
 }
 
 void	ft_key_backsp(void)
 {
-	char	*dc;
 	size_t	i;
 
-	dc = tgetstr("dc", 0);
-
 	tputs("\b", 1, ft_putint);
-	//shell.line
-	tputs(	dc, 1, ft_putint);
+	tputs(shell.dc, 1, ft_putint);
 
 	i = ft_strlen(shell.line);
 	shell.line[i - 1] = '\0';
 }
-
-//	char	*right	= tgetstr("nd", 0);
-//	char	*left	= tgetstr("le", 0);
-//	char	*kl		= tgetstr("kl", 0);
-
-//else if (strcmp(buf, "\033[D") == 0)	//key left else if (strcmp(buf, kl) == 0)	
-//	write (1, buf, 2);
-//else if (strcmp(buf, right) == 0)		//key right
-//	write (1, "RG", 2);

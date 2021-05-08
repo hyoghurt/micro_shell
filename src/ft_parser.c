@@ -22,18 +22,16 @@ void	ft_parser(void)
 
 	while (*shell.line && *shell.line != ';')
 	{
-		//printf("shell.pars.sta=[%s]\n", shell.line);
 		list = 0;
 		ft_crt_lst(&list);
-		token = ft_crttkn_from_list(list);
+		token = ft_crt_arr_bi_from_list(list);
 		ft_lstclear(&list, free);
 		if (!token)
-			ft_exit("error");
+			ft_exit("malloc", "error");
 		new = ft_cmdnew(token);
 		if (!new)
-			ft_exit("error");
+			ft_exit("malloc", "error");
 		ft_cmdadd_back(&shell.cmd_table, new);
-		//printf("shell.pars.fin=[%s]\n", shell.line);
 	}
 }
 

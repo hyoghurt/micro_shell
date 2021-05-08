@@ -1,87 +1,116 @@
 #include "minishell.h"
 
-void	check_token(void)
-{
-	char	**s;
-	t_cmd	*tmp;
-	int		i;
-
-	tmp = shell.cmd_table;
-	while (tmp)
-	{
-		s = tmp->token;
-		i = 0;
-		while (s[i])
-		{
-			printf("\e[1;38;5;10mtoken[%d]=\t[%s]\e[0m\n", i, s[i]);
-			i++;
-		}
-		printf("\n");
-		tmp = tmp->next;
-	}
-}
-
-void	check_status(void)
-{
-	printf("\e[1;38;5;10m\np shell.cmd_table=%p\e[0m\n", shell.cmd_table);
-	printf("\e[1;38;5;10mstatus=[%d]\e[0m\n", shell.status);
-	printf("\e[1;38;5;10mexit_executor\e[0m\n");
-}
-
-typedef struct	s_fd
-{
-	int			tmp_in;
-	int			tmp_out;
-	int			fd_in;
-	int			fd_out;
-	int			fd_pipe[2];
-}				t_fd;
-
 static void	ft_create_child_process(t_cmd *tmp_cmd);
 static void	ft_execve(t_cmd *cmd);
 int			ft_fd_in(t_fd *std);
 int			ft_fd_out(t_fd *std);
 void		ft_fd_pipe(t_fd *std);
-void		ft_restore_fd(t_fd *std);
+void		ft_restore_fd(void);
 
 //write error see for dup == -1
-void	ft_executor(void)
+int		ft_save_in_out(void)
 {
-	t_fd	std;
+	shell.std.tmp_in = dup(0);					//save in
+	if (shell.std.tmp_in < 0)
+	{
+		ft_putstr_fd("save_stdin: dup: ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		return (1);
+	}
+	shell.std.tmp_out = dup(1);					//save out
+	if (shell.std.tmp_out < 0)
+	{
+		close(shell.std.tmp_in);
+		ft_putstr_fd("save_stdin: dup: ", 2);
+		return (1);
+	}
+	return (0);
+}
+
+int		ft_init_input(void)
+{
+	if (shell.in_file)
+	{
+		shell.std.fd_in = open(shell.in_file, O_RDONLY);
+		if (shell.std.fd_in < 0)
+		{
+			ft_restore_fd();
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(shell.in_file, 2);
+			ft_putstr_fd(": ", 2);
+			ft_putstr_fd(strerror(errno), 2);
+			return (1);
+		}
+	}
+	else
+		shell.std.fd_in = dup(shell.std.tmp_in);
+	if (shell.std.fd_in < 0)
+	{
+		ft_restore_fd();
+		ft_putstr_fd("minishell: dup:", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		return (1);
+	}
+	return (0);
+}
+		
+int	ft_redirect_input(void)
+{
+	if (dup2(shell.std.fd_in, 0) < 0)
+	{
+		close(shell.std.fd_in);
+		ft_restore_fd();
+		ft_putstr_fd("minishell: redirect input:", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		return (1);
+	}
+	close(shell.std.fd_in);
+	return (0);
+}
+
+void	ft_fd_pipe(t_fd *std)
+{
+	pipe(std->fd_pipe);
+	std->fd_out = std->fd_pipe[1];
+	std->fd_in = std->fd_pipe[0];
+}
+
+int		ft_executor(void)
+{
 	t_cmd	*tmp_cmd;
 
-	check_token();				//debager
-	tmp_cmd = shell.cmd_table;	//tmp cmd_table
-	std.tmp_in = dup(0);		//save in
-	std.tmp_out = dup(1);		//save out
-	std.fd_in = ft_fd_in(&std);	//initial input
+	debag_check_token();					//debager
+	tmp_cmd = shell.cmd_table;				//tmp cmd_table
+	if (ft_save_in_out())
+		return (1);
+	if (ft_init_input())
+		return (1);
 	while (tmp_cmd)
 	{
-		dup2(std.fd_in, 0);		//redirect input
-		close(std.fd_in);
-
-		if (!tmp_cmd->next)		//last command fd_out
-			std.fd_out = ft_fd_out(&std);
-		else					//no last command
-			ft_fd_pipe(&std);
-
-		dup2(std.fd_out, 1);	//redirect output
-		close(std.fd_out);
-
+		if (ft_redirect_input())			//redirect input
+			return (1);
+		if (!tmp_cmd->next)					//last command fd_out
+			shell.std.fd_out = ft_fd_out(&shell.std);
+		else								//no last command
+			ft_fd_pipe(&shell.std);
+		dup2(shell.std.fd_out, 1);			//redirect output
+		close(shell.std.fd_out);
 		ft_create_child_process(tmp_cmd);	//execve
 		tmp_cmd = tmp_cmd->next;			//next pipe
 	}
-	ft_restore_fd(&std);		//restore in/out default
-	ft_cmdclear(&shell.cmd_table);			//inside (shell.cmd_table = 0)
-	//write func free shell.fd_in and out
-	check_status();				//debager
+	ft_restore_fd();						//restore in/out default
+	debag_check_status();					//debager
+	return (0);
 }
 
 static void	ft_create_child_process(t_cmd *tmp_cmd)
 {
 	shell.pathtkn = ft_path_token(tmp_cmd);			//valitza posle shell.pathtkn
 	if (!shell.pathtkn)
+	{
+		wait(0);
 		printf("minishell: command not found: %s\n", tmp_cmd->token[0]);
+	}
 	else
 	{
 		ft_execve(tmp_cmd);							//process start
@@ -96,18 +125,33 @@ static void	ft_execve(t_cmd *cmd)
 	pid_t	wpid;
 
 	pid = fork();
+
+	if (pid < 0)									//error fork
+	{
+		ft_putstr_fd("minishell: pid: ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
+	}
 	if (pid == 0)										//process child
 	{
-		execve(shell.pathtkn, cmd->token, shell.set);
-		printf("execve: %s\n", strerror(errno));		//write stderr
+		signal(SIGINT, SIG_DFL);				//signal Ctrl-C
+		if (execve(shell.pathtkn, cmd->token, shell.set) == -1)
+		{
+			ft_putstr_fd(cmd->token[0], 2);
+			ft_putstr_fd(": ", 2);
+			ft_putstr_fd(strerror(errno), 2);
+			ft_putstr_fd("\n", 2);
+		}
 		exit(1);										//stop process child
 	}
-	else if (pid < 0)									//error fork
-		printf("fork: %s\n", strerror(errno));			//write stderr
 	else												//waiting exit child process
 	{
 		if (wait(&shell.status) == -1)
-			ft_exit("error");
+		{
+			ft_putstr_fd("minishell: wait: ", 2);
+			ft_putstr_fd(strerror(errno), 2);
+			ft_putstr_fd("\n", 2);
+		}
 	}
 }
 
@@ -133,18 +177,16 @@ int		ft_fd_out(t_fd *std)
 	return (fd_out);
 }
 
-void	ft_fd_pipe(t_fd *std)
+void	ft_restore_fd(void)
 {
-	pipe(std->fd_pipe);
-	std->fd_out = std->fd_pipe[1];
-	std->fd_in = std->fd_pipe[0];
-}
+	int	ret;
 
-void	ft_restore_fd(t_fd *std)
-{
-	dup2(std->tmp_in, 0);
-	dup2(std->tmp_out, 1);
-
-	close(std->tmp_in);
-	close(std->tmp_out);
+	ret = dup2(shell.std.tmp_in, 0);
+	close(shell.std.tmp_in);
+	if (ret < 0)
+		ft_exit("restore_fd_in dup2", "error");
+	ret = dup2(shell.std.tmp_out, 1);
+	close(shell.std.tmp_out);
+	if (ret < 0)
+		ft_exit("restore_fd_out dup2", "error");
 }

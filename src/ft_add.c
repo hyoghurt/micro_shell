@@ -74,7 +74,7 @@ void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new)
 	}
 }
 
-char	**ft_crttkn_from_list(t_list *list)
+char	**ft_crt_arr_bi_from_list(t_list *list)
 {
 	size_t	size;
 	char	**tokens;

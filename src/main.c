@@ -1,13 +1,28 @@
 #include "minishell.h"
 
-void	check_iter_and_line(int i)
+void	ft_save_story(void)
 {
-	printf("\n\e[1;38;5;10mshell.line=\t[%s]\e[0m\n", shell.line);
+	t_story	*tmp;
+	char	*tmp_line;
+
+	tmp = shell.story;
+	tmp_line = ft_strdup(shell.line);
+	free(tmp->str);
+	tmp->str = ft_strdup(tmp_line);
+	shell.line = tmp->str;
 }
 
-void	ft_check_sintax_error(void)
+void	debag_check_story(void)
 {
-	;
+	t_story	*tmp;
+
+	tmp = shell.story;
+
+	while (tmp)
+	{
+		printf("story=%s\n", tmp->str);
+		tmp = tmp->next;
+	}
 }
 
 int		main(int argc, char **argv, char **envp)
@@ -16,19 +31,19 @@ int		main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		ft_set_prompt();				//set prompt
-		ft_read();						//read terminal
+		ft_read();						//read terminal	(create shell.line)
 		ft_check_sintax_error();		//  !!!!!  write check ;;
-		check_iter_and_line(0);			//debager_mzf
+		//debag_check_shell_line();		//debag shell.line
 		write (1, "\n", 1);
-		if (shell.line)					//if have command
+		while (*shell.line)			//loop if have ';'
 		{
-			while (*shell.line)			//loop if have ';'
-			{
-				ft_parser();			//parser command line
-				ft_executor();			//processing command
-				if (*shell.line == ';')
-					shell.line++;
-			}
+			ft_parser();			//parser command line
+			ft_executor();			//processing command
+			if (*shell.line == ';')
+				shell.line++;
+			ft_cmdclear(&shell.cmd_table);
+			//write func free shell.fd_in and out
 		}
+		debag_check_story();
 	}
 }

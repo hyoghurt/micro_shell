@@ -2,11 +2,8 @@
 
 int		ft_print_error(void)
 {
-	char	*string;
-
-	string = strerror(errno);
-	if (string)
-		write (2, string, ft_strlen(string));
+	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd("\n", 2);
 	return (1);
 }
 
@@ -40,16 +37,12 @@ void	ft_cmdclear(t_cmd **cmd)
 
 void	ft_free_shell(void)
 {
-	if (shell.cache_bi)
-		ft_free_bi(shell.cache_bi);
 	if (shell.cmd_table)
 		ft_cmdclear(&shell.cmd_table);
 	if (shell.out_file)
 		free(shell.out_file);
 	if (shell.in_file)
 		free(shell.in_file);
-	if (shell.err_file)
-		free(shell.err_file);
 	if (shell.set)
 		ft_free_bi(shell.set);
 	if (shell.pathtkn)
@@ -64,8 +57,8 @@ int		ft_exit(char *msg, char *s)
 	ft_free_shell();
 	if (msg)
 	{
-		write (2, msg, ft_strlen(msg));
-		write (2, ": ", 2);
+		ft_putstr_fd(msg, 2);
+		ft_putstr_fd(": ", 2);
 	}
 	if (s)
 	{
@@ -75,6 +68,6 @@ int		ft_exit(char *msg, char *s)
 	}
 	if (tcsetattr(0, TCSANOW, &shell.termios_p) != 0)
 		ret = ft_print_error();
-	write(1, "exit\n", 5);
+	ft_putstr_fd("exit\n", 1);
 	exit (ret);
 }
