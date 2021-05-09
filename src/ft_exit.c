@@ -24,19 +24,23 @@ void	ft_free_bi(char **s)
 void	ft_cmdclear(t_cmd **cmd)
 {
 	t_cmd	*tmp;
+	t_cmd	*bg;
 
-	while (*cmd)
+	tmp = *cmd;
+	while (tmp)
 	{
-		tmp = *cmd;
-		*cmd = (*cmd)->next;
-		ft_free_bi(tmp->token);
-		free(tmp);
-		tmp = 0;
+		bg = tmp;
+		tmp = tmp->next;
+		ft_free_bi(bg->token);
+		free(bg);
 	}
+	*cmd = 0;
 }
 
 void	ft_free_shell(void)
 {
+	if (shell.line)
+		free(shell.line);
 	if (shell.cmd_table)
 		ft_cmdclear(&shell.cmd_table);
 	if (shell.out_file)

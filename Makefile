@@ -7,7 +7,7 @@ CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror
 
 $(NAME):		$(OBJ)
-				make bonus -C libft
+				make -C libft
 				$(CC) $(OBJ) -ltermcap -lncurses -Llibft -lft -o $(NAME) 
 
 ##-lncurses

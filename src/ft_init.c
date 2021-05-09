@@ -100,18 +100,22 @@ void	ft_init_shell_line(void)
 
 void	ft_init_key(void)
 {
-	shell.dl		= tgetstr("dl", 0);		//clear line
-	shell.dc		= tgetstr("dc", 0);		//kursor left
-	shell.down		= tgetstr("do", 0);
-	//shell.down	= tgetstr("kd", 0);
-	shell.down		= "\033[B";
-	//shell.right	= tgetstr("nd", 0);
-	//shell.left	= tgetstr("le", 0);
-	//shell.left	= tgetstr("kl", 0);
-	//shell.left	= "\033[D";
-	shell.up		= tgetstr("up", 0);
-	shell.backsp	= tgetstr("kb", 0);
-
-	if (!shell.dl || !shell.down || !shell.up || !shell.backsp)	//write
-		ft_exit ("tgetstr", "error");
+	shell.key.dl		= tgetstr("dl", 0);		//clear line
+	shell.key.dc		= tgetstr("dc", 0);		//kursor left
+	//shell.key.down		= tgetstr("do", 0);
+	//shell.down		= tgetstr("kd", 0);
+	shell.key.down		= "\033[B";
+	//shell.right		= tgetstr("nd", 0);
+	//shell.left		= tgetstr("le", 0);
+	//shell.left		= tgetstr("kl", 0);
+	//shell.left		= "\033[D";
+	shell.key.up		= tgetstr("up", 0);
+	shell.key.backsp	= tgetstr("kb", 0);
+	//shell.key.co		= tgetnum("co");
+	//shell.key.li		= tgetnum("li");
+	shell.key.rc		= tgetstr("rc", 0);
+	shell.key.cd		= tgetstr("cd", 0);
+	shell.key.sc		= tgetstr("sc", 0);
+	//if (!shell.dl || !shell.down || !shell.up || !shell.backsp)	//write
+	//	ft_exit ("tgetstr", "error");
 }

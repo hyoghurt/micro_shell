@@ -5,6 +5,19 @@ void	debag_check_shell_line(void)
 	printf("\n\e[1;38;5;10mshell.line=\t[%s]\e[0m\n", shell.line);
 }
 
+void	debag_check_story(void)
+{
+	t_story	*tmp;
+
+	tmp = shell.story;
+
+	while (tmp)
+	{
+		printf("story=%s\n", tmp->str);
+		tmp = tmp->next;
+	}
+}
+
 void	debag_check_token(void)
 {
 	char	**s;

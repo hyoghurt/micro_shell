@@ -79,7 +79,7 @@ int		ft_executor(void)
 {
 	t_cmd	*tmp_cmd;
 
-	debag_check_token();					//debager
+	//debag_check_token();					//debager
 	tmp_cmd = shell.cmd_table;				//tmp cmd_table
 	if (ft_save_in_out())
 		return (1);
@@ -99,7 +99,7 @@ int		ft_executor(void)
 		tmp_cmd = tmp_cmd->next;			//next pipe
 	}
 	ft_restore_fd();						//restore in/out default
-	debag_check_status();					//debager
+	//debag_check_status();					//debager
 	return (0);
 }
 
