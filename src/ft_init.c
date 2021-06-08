@@ -8,6 +8,7 @@ void	ft_init_key(void);
 
 void	ft_init(char **envp)
 {
+<<<<<<< HEAD
 	//signal(SIGINT, ft_sig_ctrl_c);		//signal Ctrl-C
 	signal(SIGINT, SIG_IGN);				//signal Ctrl-C
 
@@ -18,6 +19,18 @@ void	ft_init(char **envp)
 }
 
 void	ft_init_struct(void)		//init struct
+=======
+	//signal(SIGINT, ft_sig_ctrl_c);				//signal Ctrl-C
+	signal(SIGINT, SIG_IGN);				//signal Ctrl-C
+
+	ft_init_struct();							//init struct shell (global varible)
+	ft_init_termios();							//init terminal
+	ft_init_key();
+	ft_init_set(envp);							//copy envp in shell.set
+}
+
+void	ft_init_struct(void)
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	shell.story = 0;
 	shell.line = 0;
@@ -29,7 +42,11 @@ void	ft_init_struct(void)		//init struct
 	shell.pathtkn = 0;
 }
 
+<<<<<<< HEAD
 void	ft_init_termios(void)		//setting terminal for my
+=======
+void	ft_init_termios(void)
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	struct termios	termios_temp;
 
@@ -44,7 +61,11 @@ void	ft_init_termios(void)		//setting terminal for my
 		ft_exit("tcgetattr", "error");
 }
 
+<<<<<<< HEAD
 void	ft_init_termtype(void)		//init terminal
+=======
+void	ft_init_termtype(void)
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	char	*termtype;
 	char	term_buffer[2048];
@@ -56,7 +77,11 @@ void	ft_init_termtype(void)		//init terminal
 		ft_exit("tgetent", "err_tcgetattr");
 }
 
+<<<<<<< HEAD
 void	ft_init_set(char **envp)	//copy envp in shell.set
+=======
+void	ft_init_set(char **envp)
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	size_t	size;
 	char	**set;
@@ -72,7 +97,11 @@ void	ft_init_set(char **envp)	//copy envp in shell.set
 		ft_exit("malloc", "error");
 }
 
+<<<<<<< HEAD
 void	ft_init_shell_line(void)   //do recalloc shell.line
+=======
+void	ft_init_shell_line(void)
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	size_t	len;
 	size_t	rest;
@@ -98,11 +127,19 @@ void	ft_init_shell_line(void)   //do recalloc shell.line
 		ft_exit("malloc in init_shell_line", "error");
 }
 
+<<<<<<< HEAD
 void	ft_init_key(void)						//save code key in struct
 {
 	shell.key.dl		= tgetstr("dl", 0);		//clear line
 	shell.key.dc		= tgetstr("dc", 0);		//kursor left
 	//shell.key.down	= tgetstr("do", 0);
+=======
+void	ft_init_key(void)
+{
+	shell.key.dl		= tgetstr("dl", 0);		//clear line
+	shell.key.dc		= tgetstr("dc", 0);		//kursor left
+	//shell.key.down		= tgetstr("do", 0);
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 	//shell.down		= tgetstr("kd", 0);
 	shell.key.down		= "\033[B";
 	//shell.right		= tgetstr("nd", 0);
@@ -111,12 +148,20 @@ void	ft_init_key(void)						//save code key in struct
 	//shell.left		= "\033[D";
 	shell.key.up		= tgetstr("up", 0);
 	shell.key.backsp	= tgetstr("kb", 0);
+<<<<<<< HEAD
 	//shell.key.backsp	= "\033^H";
 	//shell.key.co		= tgetnum("co");
 	//shell.key.li		= tgetnum("li");
 	shell.key.rc		= tgetstr("rc", 0);		//restore "sc" position
 	shell.key.cd		= tgetstr("cd", 0);
 	shell.key.sc		= tgetstr("sc", 0);		//save cursor position
+=======
+	//shell.key.co		= tgetnum("co");
+	//shell.key.li		= tgetnum("li");
+	shell.key.rc		= tgetstr("rc", 0);
+	shell.key.cd		= tgetstr("cd", 0);
+	shell.key.sc		= tgetstr("sc", 0);
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 	//if (!shell.dl || !shell.down || !shell.up || !shell.backsp)	//write
 	//	ft_exit ("tgetstr", "error");
 }

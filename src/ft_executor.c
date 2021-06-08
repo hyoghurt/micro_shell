@@ -13,7 +13,11 @@ int		ft_save_in_out(void)
 	shell.std.tmp_in = dup(0);					//save in
 	if (shell.std.tmp_in < 0)
 	{
+<<<<<<< HEAD
 		ft_putstr_fd("minishell: save_stdin: dup: ", 2);
+=======
+		ft_putstr_fd("save_stdin: dup: ", 2);
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 		ft_putstr_fd(strerror(errno), 2);
 		return (1);
 	}
@@ -21,7 +25,11 @@ int		ft_save_in_out(void)
 	if (shell.std.tmp_out < 0)
 	{
 		close(shell.std.tmp_in);
+<<<<<<< HEAD
 		ft_putstr_fd("minishell: save_stdin: dup: ", 2);
+=======
+		ft_putstr_fd("save_stdin: dup: ", 2);
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 		return (1);
 	}
 	return (0);

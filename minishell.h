@@ -16,14 +16,22 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 
+<<<<<<< HEAD
 typedef struct		s_story			//story
+=======
+typedef struct		s_story
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	char			*str;
 	struct s_story	*back;
 	struct s_story	*next;
 }					t_story;
 
+<<<<<<< HEAD
 typedef struct		s_fd			//fd
+=======
+typedef struct		s_fd
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	int				tmp_in;
 	int				tmp_out;
@@ -32,6 +40,7 @@ typedef struct		s_fd			//fd
 	int				fd_pipe[2];
 }					t_fd;
 
+<<<<<<< HEAD
 typedef struct		s_cmd			//command
 {
 	char			**token;		//array command (example: cmd1 | cmd2 | cmd3)
@@ -39,6 +48,15 @@ typedef struct		s_cmd			//command
 }					t_cmd;
 
 typedef struct		s_key			//key
+=======
+typedef struct		s_cmd
+{
+	char			**token;			//array command (example: cmd1 | cmd2 | cmd3)
+	struct s_cmd	*next;
+}					t_cmd;
+
+typedef struct		s_key
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	char			*up;			//key up
 	char			*down;			//key down
@@ -52,6 +70,7 @@ typedef struct		s_key			//key
 	int				li;				//sum row
 }					t_key;
 
+<<<<<<< HEAD
 typedef struct		s_shell			//general
 {
 	struct termios	termios_p;		//standart terminal config
@@ -64,11 +83,29 @@ typedef struct		s_shell			//general
 	int				fg_mv_story;	//flag for story move
 	char			*line;			//string command
 	char			**set;			//set variable (init: copy envp in set)
+=======
+typedef struct		s_shell
+{
+	struct termios	termios_p;		//standart terminal config
+	struct s_story	*story;			//save story
+	struct s_cmd	*cmd_table;		//table tokens (cmd_table->token | cmd_table->next->token ...)
+	struct s_fd		std;
+	struct s_story	*move_story;	//save story
+	struct s_key	key;
+
+	int				fg_mv_story;		//for story move
+	char			*line;			//string command
+	char			**set;			//set variable
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 
 	char			*out_file;		//file stdout
 	char			*in_file;		//file stdin
 
+<<<<<<< HEAD
 	char			*pathtkn;		//path_token for execve (execve(pathtkn, cmd_table->token, set)) (path command)
+=======
+	char			*pathtkn;		//path_token for execve (execve(pathtkn, cmd_table->token, set))
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 
 	int				status;			//status exit
 }					t_shell;

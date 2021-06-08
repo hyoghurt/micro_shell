@@ -114,7 +114,11 @@ char	*ft_getset(char *str)
 			if (*(*tmp + len) == '=')
 				return (ft_strdup(*tmp + len + 1));
 		}
+<<<<<<< HEAD
 		(*tmp)++;
+=======
+		*tmp++;
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 	}
 	return (0);
 }

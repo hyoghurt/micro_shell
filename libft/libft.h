@@ -6,7 +6,11 @@
 /*   By: hyoghurt <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/10 14:13:24 by hyoghurt          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/06/08 07:06:36 by hyoghurt         ###   ########.fr       */
+=======
+/*   Updated: 2020/11/19 12:19:27 by hyoghurt         ###   ########.fr       */
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +20,11 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+<<<<<<< HEAD
 typedef struct s_list
+=======
+typedef struct		s_list
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	void			*content;
 	struct s_list	*next;
@@ -65,6 +73,10 @@ void				ft_lstdelone(t_list *lst, void (*del)(void *));
 void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
+<<<<<<< HEAD
 						void (*del)(void *));
+=======
+					void (*del)(void *));
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 
 #endif

@@ -6,7 +6,11 @@
 /*   By: hyoghurt <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/10 14:37:22 by hyoghurt          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/06/08 07:16:04 by hyoghurt         ###   ########.fr       */
+=======
+/*   Updated: 2020/11/19 12:17:22 by hyoghurt         ###   ########.fr       */
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +47,11 @@ static size_t	m_lench(char const *s, size_t i, char c)
 	return (j);
 }
 
+<<<<<<< HEAD
 static void	m_clear(char **r, size_t j)
+=======
+static void		m_clear(char **r, size_t j)
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	size_t	i;
 
@@ -57,7 +65,11 @@ static void	m_clear(char **r, size_t j)
 	r = 0;
 }
 
+<<<<<<< HEAD
 static void	m_zapolnen(char **r, char const *s, char c, size_t k)
+=======
+static void		m_zapolnen(char **r, char const *s, char c, size_t k)
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	size_t	i;
 	size_t	j;
@@ -80,7 +92,11 @@ static void	m_zapolnen(char **r, char const *s, char c, size_t k)
 		r[j] = 0;
 }
 
+<<<<<<< HEAD
 char	**ft_split(char const *s, char c)
+=======
+char			**ft_split(char const *s, char c)
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 {
 	size_t	k;
 	char	**r;
@@ -88,8 +104,12 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (0);
 	k = m_count(s, c);
+<<<<<<< HEAD
 	r = (char **)malloc(sizeof(char *) * (k + 1));
 	if (!r)
+=======
+	if (!(r = (char **)malloc(sizeof(char *) * (k + 1))))
+>>>>>>> c8528fe1c906ed3fcf64355d5c43dea9fff470da
 		return (0);
 	m_zapolnen(r, s, c, k);
 	return (r);
