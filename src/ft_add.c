@@ -46,6 +46,7 @@ char	**ft_cpy_array_bi(char **s1, char **s2)
 int		ft_putint(int c)
 {
 	write(1, &c, 1);
+	return (1);
 }
 
 t_cmd	*ft_cmdnew(char	**token)

@@ -25,11 +25,10 @@ typedef struct		s_story			//story
 
 typedef struct		s_fd			//fd
 {
-	int				tmp_in;
-	int				tmp_out;
+	int				tmp_in;			//save stdin (0) need for restore stdin
+	int				tmp_out;		//save stdout (1) need for restore stdout
 	int				fd_in;
 	int				fd_out;
-	int				fd_pipe[2];
 }					t_fd;
 
 typedef struct		s_cmd			//command
@@ -55,13 +54,15 @@ typedef struct		s_key			//key
 typedef struct		s_shell			//general
 {
 	struct termios	termios_p;		//standart terminal config
+
 	struct s_story	*story;			//story
+	struct s_story	*move_story;	//save pointer for move story
+	int				fg_mv_story;	//flag for story move
+
 	struct s_cmd	*cmd_table;		//table tokens (cmd_table->token | cmd_table->next->token ...)
 	struct s_fd		std;			//fd (need for pipe)
-	struct s_story	*move_story;	//save pointer for move story
 	struct s_key	key;			//code key
 
-	int				fg_mv_story;	//flag for story move
 	char			*line;			//string command
 	char			**set;			//set variable (init: copy envp in set)
 
@@ -113,5 +114,10 @@ void	debag_check_token(void);
 void	debag_check_status(void);
 void	debag_check_shell_line(void);
 void	debag_check_story(void);
+
+int		ft_fn_selector(void);
+void	ft_builtin(void);
+
+
 
 #endif
