@@ -2,9 +2,16 @@
 
 int		ft_echo(void)
 {
-	int i;
+	int		i;
+	int		j;
 
 	i = 1;
+	j = 0;
+	if (!ft_strncmp(shell.cmd_table->token[1], "-n", 1))
+	{
+		i = 2;
+		j = 1;
+	}
 	while (shell.cmd_table->token[i] != 0)
 	{
 		ft_putstr_fd(shell.cmd_table->token[i],1);
@@ -14,6 +21,7 @@ int		ft_echo(void)
 		}
 		i++;
 	}
+	(j == 1) ? printf("%%"):0;
 	printf("\n");
 	return (1);
 }
