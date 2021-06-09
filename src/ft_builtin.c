@@ -2,8 +2,19 @@
 
 int		ft_echo(void)
 {
-	printf("in_echo\n");
-	
+	int i;
+
+	i = 1;
+	while (shell.cmd_table->token[i] != 0)
+	{
+		ft_putstr_fd(shell.cmd_table->token[i],1);
+		if (shell.cmd_table->token[i+1] != 0)
+		{
+			ft_putstr_fd(" ", 1);
+		}
+		i++;
+	}
+	printf("\n");
 	return (1);
 }
 
