@@ -27,6 +27,8 @@ void	ft_init_struct(void)		//init struct
 	shell.status = 0;
 	shell.set = 0;
 	shell.pathtkn = 0;
+	shell.std.fd_in_file = -1;
+	shell.std.fd_out_file = -1;
 }
 
 void	ft_init_termios(void)		//setting terminal for my

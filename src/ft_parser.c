@@ -2,16 +2,14 @@
 
 void	ft_exit_token(t_list **list)
 {
-	printf("exiiiiiiiiiit_tokkkkkkkkkkkkken\n");
 	ft_lstclear(list, free);
-	ft_exit("token", "error");
+	ft_exit("malloc", "error");
 }
 
 static void	ft_crt_lst(t_list **list);
 static void	ft_new_token(t_list **list, char c);
 static char	*ft_word(void);
 static char	*ft_quote(char c);
-static void	ft_redirect_std(t_list **list);
 static char	*ft_file(void);
 
 void	ft_parser(void)					//create shell.cmd_table  (is it token[0] token[1] ... | token[0] token[1] ...)
@@ -41,8 +39,6 @@ static void	ft_crt_lst(t_list **list)			//create list separate word before '|'
 	{
 		if (ft_strchr("\'\"", *shell.line))		//check quotes
 			ft_new_token(list, *shell.line);	//create char*
-		//else if (ft_strchr("<>", *shell.line))	//check redirect (<, >, <<)
-		//	ft_redirect_std(list);
 		else if (*shell.line == '|')
 		{
 			shell.line++;
@@ -52,7 +48,6 @@ static void	ft_crt_lst(t_list **list)			//create list separate word before '|'
 			ft_new_token(list, 0);				//create char*
 		else
 			shell.line++;
-		//printf("*shell.line=[%c]\n", *shell.line);
 	}
 }
 
@@ -79,8 +74,19 @@ static char	*ft_word(void)			// \n or \t word
 	char	*content;
 
 	start = shell.line;
-	while (!ft_strchr(" \t\n|;><\'\"$", *shell.line))
+	if (ft_strchr("><", *shell.line))
+	{
 		shell.line++;
+		if (ft_strchr(">", *shell.line))
+			shell.line++;
+	}
+	else if(ft_strchr("$", *shell.line))
+		shell.line++;
+	else
+	{
+		while (!ft_strchr(" \t\n|;><\'\"$", *shell.line))
+			shell.line++;
+	}
 	content = ft_substr(start, 0, shell.line - start);
 	return (content);
 }
@@ -98,36 +104,3 @@ static char	*ft_quote(char c)		// " or ' word
 	shell.line++;
 	return (content);
 }
-
-/*
-static void	ft_redirect_std(t_list **list)
-{
-	char	*file;
-	char	*tmp;
-
-	tmp = shell.line;
-
-	file = ft_file();
-	if (!file)
-		ft_exit_token(list);
-
-	if (*tmp == '<')
-		shell.in_file = file;
-	else if (*tmp == '>')
-		shell.out_file = file;
-}
-
-static char	*ft_file(void)
-{
-	shell.line++;
-	while (*shell.line)
-	{
-		if (ft_strchr("\'\"", *shell.line))
-			return (ft_quote(*shell.line));
-		else if (!ft_strchr(" \t\n", *shell.line))
-			return (ft_word());
-		shell.line++;
-	}
-}
-*/
-

@@ -29,6 +29,8 @@ typedef struct		s_fd			//fd
 	int				tmp_out;		//save stdout (1) need for restore stdout
 	int				fd_in;
 	int				fd_out;
+	int				fd_in_file;
+	int				fd_out_file;
 }					t_fd;
 
 typedef struct		s_cmd			//command
@@ -105,10 +107,18 @@ char	**ft_crt_arr_bi_from_list(t_list *list);
 size_t	ft_array_len(char **envp);
 char	**ft_cpy_array_bi(char **s1, char **s2);
 char	*ft_getset(char *str);
-char	*ft_path_token(t_cmd *cmd);
+char	*ft_path_token(char **cmd);
 void	ft_init_shell_line(void);
 void	ft_check_sintax_error(void);
 int		ft_check_lexer(char *line);
+
+int		ft_save_stdin_stdout(void);
+int		ft_fd_in(void);
+int		ft_fd_out(void);
+void	ft_fd_pipe(void);
+int		ft_redirect_input(void);
+int		ft_redirect_output(void);
+void	ft_restore_fd(void);
 
 void	debag_check_token(void);
 void	debag_check_status(void);

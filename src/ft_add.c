@@ -65,13 +65,16 @@ t_cmd	*ft_cmdnew(char	**token)
 		
 void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new)
 {
-	if (!(*cmd))
+	t_cmd	*tmp;
+
+	tmp = *cmd;
+	if (!tmp)
 		*cmd = new;
 	else
 	{
-		while((*cmd)->next)
-			*cmd = (*cmd)->next;
-		(*cmd)->next = new;
+		while(tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
 	}
 }
 
