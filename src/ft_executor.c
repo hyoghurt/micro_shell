@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	ft_create_child_process(char **cmd);
+int	ft_create_child_process(char **cmd);
 static void	ft_execve(char **cmd);
 
 int	find_redirect_file(char **token)
@@ -74,7 +74,8 @@ int		ft_executor(void)
 		dup2(fdout, 1);
 		close(fdout);
 
-		ft_create_child_process(tmp_cmd->token);	//execve
+		if (ft_create_child_process(tmp_cmd->token))
+			break ;
 		tmp_cmd = tmp_cmd->next;
 	}
 
@@ -82,6 +83,16 @@ int		ft_executor(void)
 	dup2(tmpout, 1);
 	close(tmpin);
 	close(tmpout);
+
+	//kill(shell.pid->pid, SIGINT);
+
+	while (shell.pid)
+	{
+		//printf("pid=%d\n", shell.pid->pid);
+		waitpid(shell.pid->pid, &shell.status, 0);
+		shell.pid = shell.pid->next;
+	}
+
 	return (0);
 }
 
@@ -120,29 +131,63 @@ int		ft_executor(void)
 }
 */
 
-static void	ft_create_child_process(char **cmd)
+int		ft_create_child_process(char **cmd)
 {
 	//if (!ft_fn_selector())
 	//{
 		shell.pathtkn = ft_path_token(cmd);			//valitza posle shell.pathtkn
 		if (!shell.pathtkn)
 		{
-			wait(0);
-			printf("minishell: command not found: %s\n", cmd[0]);
+			//wait(0);
+			ft_putstr_fd("minishell: command not found: ", 2);
+			ft_putstr_fd(cmd[0], 2);
+			ft_putstr_fd("\n", 2);
+			shell.pid = 0;
+			kill(0, SIGINT);
+			
+			return (1);
 		}
 		else
 		{
-			ft_execve(cmd);							//process start
+			ft_execve(cmd);
 			free(shell.pathtkn);
 			shell.pathtkn = 0;
 		}
+		return (0);
 	//}
+}
+
+t_pid	*ft_pidnew(int n)
+{
+	t_pid	*new;
+
+	new = (t_pid*)malloc(sizeof(t_pid));
+	if (!new)
+		return (0);
+	new->pid = n;
+	new->next = 0;
+	return (new);
+}
+
+void	ft_addpid_back(t_pid **pid, t_pid *new)
+{
+	t_pid	*tmp;
+
+	tmp = *pid;
+	if (!tmp)
+		*pid = new;
+	else
+	{
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
 }
 
 static void	ft_execve(char **cmd)
 {
 	pid_t	pid;
-	pid_t	wpid;
+	t_pid	*new;
 
 	pid = fork();
 
@@ -164,13 +209,6 @@ static void	ft_execve(char **cmd)
 		}
 		exit(1);										//stop process child
 	}
-	else												//waiting exit child process
-	{
-		if (wait(&shell.status) == -1)
-		{
-			ft_putstr_fd("minishell: wait: ", 2);
-			ft_putstr_fd(strerror(errno), 2);
-			ft_putstr_fd("\n", 2);
-		}
-	}
+	new = ft_pidnew(pid);
+	ft_addpid_back(&shell.pid, new);
 }

@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-int	ft_set_prompt(void)
-{
-	char	*user;
-
-	//user = getenv("USER");
-	user = "USER";
-	write (1, "\033[1;48;5;58m", strlen("\033[1;48;5;58m"));
-	if (user)
-		write (1, user, strlen(user));
-	write (1, " > ", 3);
-	write (1, "\033[0m", strlen("\033[0m"));
-	return (0);
-}
-
 size_t	ft_array_len(char **str)
 {
 	size_t	i;
@@ -41,12 +27,6 @@ char	**ft_cpy_array_bi(char **s1, char **s2)
 	}
 	s1[i] = 0;
 	return (s1);
-}
-
-int		ft_putint(int c)
-{
-	write(1, &c, 1);
-	return (1);
 }
 
 t_cmd	*ft_cmdnew(char	**token)
@@ -108,17 +88,20 @@ char	*ft_getset(char *str)
 {
 	char	**tmp;
 	size_t	len;
+	int		i;
 
+	i = -1;
+	if (!str)
+		return (0);
 	tmp = shell.set;
 	len = ft_strlen(str);
-	while (*tmp)
+	while (tmp[++i])
 	{
-		if (ft_strncmp(*tmp, str, len) == 0)
+		if (ft_strncmp(tmp[i], str, len) == 0)
 		{
-			if (*(*tmp + len) == '=')
-				return (ft_strdup(*tmp + len + 1));
+			if (*(tmp[i] + len) == '=')
+				return (ft_strdup(tmp[i] + len + 1));
 		}
-		(*tmp)++;
 	}
 	return (0);
 }

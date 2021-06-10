@@ -15,6 +15,10 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+
+//install libreadline-dev
 
 typedef struct		s_story			//story
 {
@@ -22,6 +26,12 @@ typedef struct		s_story			//story
 	struct s_story	*back;
 	struct s_story	*next;
 }					t_story;
+
+typedef struct		s_pid
+{
+	int				pid;
+	struct s_pid	*next;
+}					t_pid;
 
 typedef struct		s_fd			//fd
 {
@@ -74,6 +84,7 @@ typedef struct		s_shell			//general
 	char			*pathtkn;		//path_token for execve (execve(pathtkn, cmd_table->token, set)) (path command)
 
 	int				status;			//status exit
+	t_pid			*pid;
 }					t_shell;
 
 t_shell				shell;
@@ -109,8 +120,8 @@ char	**ft_cpy_array_bi(char **s1, char **s2);
 char	*ft_getset(char *str);
 char	*ft_path_token(char **cmd);
 void	ft_init_shell_line(void);
-void	ft_check_sintax_error(void);
-int		ft_check_lexer(char *line);
+
+int		ft_lexer(void);
 
 int		ft_save_stdin_stdout(void);
 int		ft_fd_in(void);

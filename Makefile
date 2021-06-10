@@ -1,5 +1,5 @@
 NAME			= minishell
-SRC				= main.c ft_init.c ft_parser.c ft_signal.c ft_exit.c ft_key.c ft_read.c ft_executor.c ft_add.c ft_path.c ft_lexer.c ft_debag.c ft_story.c ft_builtin.c ft_fd.c
+SRC				= main.c ft_init.c ft_parser.c ft_exit.c ft_executor.c ft_add.c ft_path.c ft_lexer.c ft_debag.c ft_story.c ft_builtin.c ft_fd.c
 SRCDIR			= src
 OBJDIR			= obj
 OBJ				= $(addprefix $(OBJDIR)/,$(notdir $(SRC:.c=.o)))
@@ -8,7 +8,7 @@ CFLAGS			= -Wall -Wextra -Werror
 
 $(NAME):		$(OBJ)
 				make -C libft
-				$(CC) $(OBJ) -ltermcap -lncurses -Llibft -lft -o $(NAME) 
+				$(CC) $(OBJ) -ltermcap -lncurses -lreadline -Llibft -lft -o $(NAME) 
 
 ##-lncurses
 
