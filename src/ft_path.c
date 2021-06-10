@@ -1,18 +1,18 @@
 #include "minishell.h"
 
-t_list	*ft_crt_path_list(char *path, t_cmd *cmd);
-char	*ft_str_path(char **path, t_cmd *cmd);
+t_list	*ft_crt_path_list(char *path, char **cmd);
+char	*ft_str_path(char **path, char **cmd);
 char	*ft_pathname(t_list **list);
 
-char	*ft_path_token(t_cmd *cmd)
+char	*ft_path_token(char **cmd)
 {
 	struct stat	buf;
 	char		*path;
 	t_list		*path_list;
 
-	if (stat(cmd->token[0], &buf) == 0)
+	if (stat(cmd[0], &buf) == 0)
 	{
-		path = ft_strdup(cmd->token[0]);
+		path = ft_strdup(cmd[0]);
 		if (!path)
 			printf("dopisat exit\n");
 		return (path);
@@ -29,7 +29,7 @@ char	*ft_path_token(t_cmd *cmd)
 	return (ft_pathname(&path_list));
 }
 
-t_list	*ft_crt_path_list(char *path, t_cmd *cmd)
+t_list	*ft_crt_path_list(char *path, char **cmd)
 {
 	t_list	*result;
 	t_list	*new;
@@ -55,14 +55,14 @@ t_list	*ft_crt_path_list(char *path, t_cmd *cmd)
 	return (result);
 }
 
-char	*ft_str_path(char **path, t_cmd *cmd)
+char	*ft_str_path(char **path, char **cmd)
 {
 	size_t	i;
 	char	*result;
 	char	*str;
 	size_t	len;
 
-	len = ft_strlen(cmd->token[0]);
+	len = ft_strlen(cmd[0]);
 	str = *path;
 	i = 0;
 	while (str[i] != ':' && str[i])
@@ -73,7 +73,7 @@ char	*ft_str_path(char **path, t_cmd *cmd)
 		return (0);
 	ft_memcpy(result, str, i);
 	result[i] = '/';
-	ft_memcpy((result + i + 1), cmd->token[0], len);
+	ft_memcpy((result + i + 1), cmd[0], len);
 	result[i + len + 1] = 0;
 	return (result);
 }
