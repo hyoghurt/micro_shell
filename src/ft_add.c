@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+void	ft_print_string(char *s1, char *s2, char *s3)
+{
+	ft_putstr_fd(s1, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(s2, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(s3, 2);
+	ft_putstr_fd("\n", 2);
+}
+
 size_t	ft_array_len(char **str)
 {
 	size_t	i;
@@ -40,6 +50,8 @@ t_cmd	*ft_cmdnew(char	**token)
 		return (0);
 	new->token = token;
 	new->next = 0;
+	new->fd_in = 0;
+	new->fd_out = 1;
 	return (new);
 }
 		

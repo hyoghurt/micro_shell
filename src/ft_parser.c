@@ -1,59 +1,113 @@
 #include "minishell.h"
 
-void	ft_exit_token(t_list **list)
+static void	ft_crt_lst(t_list **list);
+static char	*ft_crt_string(void);
+
+void		ft_string_redirect(char **string);
+void		ft_string_env(char **string);
+void		ft_string_word(char **string);
+void		ft_string_quote(char **string, char c);
+
+void		ft_free_string(char **string);
+void		ft_strjoin_string(char **string, char *content);
+void		ft_content(char **string, char *start);
+char		*ft_value_getset(void);
+
+int		ft_check_set(char check, char c)
 {
-	ft_lstclear(list, free);
-	ft_exit("malloc", "error");
+	if ((check == '_' || check == '?' || ft_isalnum(check)) && c == '\"')
+		return (1);
+	return (0);
 }
 
-static void	ft_crt_lst(t_list **list);
-static void	ft_new_token(t_list **list, char c);
-static char	*ft_word(void);
-static char	*ft_quote(char c);
-static char	*ft_file(void);
-char	*ft_crt_string(void);
+int		ft_check_ecran(char check, char c)
+{
+	if (ft_strchr("\\$\"", check) && c == '\"')
+		return (1);
+	return (0);
+}
 
-void	ft_parser(void)					//create shell.cmd_table  (is it token[0] token[1] ... | token[0] token[1] ...)
+void	ft_parser(void)
 {
 	t_cmd	*new;
 	t_list	*list;
 	char	**token;
 
-	while (*shell.line)
+	while (*shell.line && *shell.line != ';')
 	{
 		list = 0;
-		ft_crt_lst(&list);						//create list separate word before '|' or ';'
-		token = ft_crt_arr_bi_from_list(list);	//converted list in char**
-		ft_lstclear(&list, free);				//clear list
+		ft_crt_lst(&list);
+		if (!list)
+			ft_exit("minishell: malloc", "error");
+		token = ft_crt_arr_bi_from_list(list);
+		ft_lstclear(&list, free);
 		if (!token)
-			ft_exit("malloc", "error");
-		new = ft_cmdnew(token);					//create struct t_cmd
+			ft_exit("minishell: malloc", "error");
+		new = ft_cmdnew(token);
 		if (!new)
-			ft_exit("malloc", "error");
-		ft_cmdadd_back(&shell.cmd_table, new);	//add struct in shell.cmd_table
-		if (*shell.line == '|')
+		{
+			ft_free_bi(token);
+			ft_exit("minishell: malloc", "error");
+		}
+		ft_cmdadd_back(&shell.cmd_table, new);
+		while (*shell.line == '|' || *shell.line == ' ' || *shell.line == '\t')
 			shell.line++;
 	}
 }
 
-static void	ft_crt_lst(t_list **list)			//create list
+static void	ft_crt_lst(t_list **list)
 {
 	char	*string;
 	t_list	*new;
 
-	while (*shell.line && *shell.line != '|')
+	while (*shell.line && *shell.line != '|' && *shell.line != ';')
 	{
-		while (ft_strchr(" \t", *shell.line))
+		while (*shell.line && ft_strchr(" \t", *shell.line))
 			shell.line++;
-		if (*shell.line && *shell.line != '|')
+		if (*shell.line && *shell.line != '|' && *shell.line != ';')
 		{
 			string = ft_crt_string();
+			if (!string)
+			{
+				ft_lstclear(list, free);
+				return ;
+			}
 			new = ft_lstnew(string);
 			if (!new)
-				printf("write error\n");
+			{
+				free(string);
+				ft_lstclear(list, free);
+				return ;
+			}
 			ft_lstadd_back(list, new);
 		}
 	}
+}
+
+static char	*ft_crt_string(void)
+{
+	char	*string;
+
+	string = 0;
+	while (*shell.line && *shell.line != ';')
+	{
+		if (ft_strchr("<>", *shell.line))
+		{
+			ft_string_redirect(&string);
+			return (string);
+		}
+		else if (*shell.line == '\'' || *shell.line == '\"')
+			ft_string_quote(&string, *shell.line);
+		else if (*shell.line == '$' && ft_check_set(*(shell.line + 1), '\"'))
+			ft_string_env(&string);
+		else if (*shell.line == '|')
+			return (string);
+		else if (!ft_strchr(" \t", *shell.line))
+			ft_string_word(&string);
+		if (ft_strchr(" \t<>", *shell.line))
+			return (string);
+	}
+	return (string);
 }
 
 void	ft_string_redirect(char **string)
@@ -69,86 +123,17 @@ void	ft_string_redirect(char **string)
 	*string = content;
 }
 
-void	ft_string_env(char **string)
+void	ft_free_string(char **string)
 {
-	char	*start;
-	char	*content;
-	char	*tmp;
-
-	shell.line++;
-	if (*shell.line == '?')
-	{
-		content = ft_strdup(ft_itoa(shell.status));
-		shell.line++;
-	}
-	else if (*shell.line >= '0' && *shell.line <= '9')
-	{
-		content = 0;
-		shell.line++;
-	}
-	else if (ft_strchr(" \t\"", *shell.line))
-		content = ft_strdup("$");
-	else 
-	{
-		start = shell.line;
-		while (!ft_strchr(">< \t\'\"$|", *shell.line))
-			shell.line++;
-		tmp = ft_substr(start, 0, shell.line - start);
-		content = ft_getset(tmp);
-		free(tmp);
-	}
-	if (content)
-	{
-		if (*string)
-		{
-			tmp = ft_strjoin(*string, content);
-			free(*string);
-			free(content);
-			content = tmp;
-		}
-		*string = content;
-	}
+	if (*string)
+		free(string);
+	*string = 0;
 }
 
-void	ft_string_word(char **string);
-void	ft_string_quote(char **string, char c);
-	
-char	*ft_crt_string(void)			//create list separate word before '|'
+void	ft_strjoin_string(char **string, char *content)
 {
-	char	*string;
-
-	string = 0;
-	while (*shell.line)
-	{
-		if (ft_strchr("<>", *shell.line))
-		{
-			ft_string_redirect(&string);
-			return (string);
-		}
-		else if (ft_strchr("\'\"", *shell.line))
-			ft_string_quote(&string, *shell.line);
-		else if (*shell.line == '$')
-			ft_string_env(&string);
-		else if (*shell.line == '|')
-			return (string);
-		else if (!ft_strchr(" \t", *shell.line))
-			ft_string_word(&string);				//create char*
-		if (ft_strchr(" \t<>", *shell.line))
-			return (string);
-	}
-	return (string);
-}
-
-void	ft_string_word(char **string)			// \n or \t word
-{
-	char	*start;
-	char	*content;
 	char	*tmp;
 
-	start = shell.line;
-	while (!ft_strchr(" \t|><\'\"$", *shell.line))
-		shell.line++;
-	content = ft_substr(start, 0, shell.line - start);
 	if (*string)
 	{
 		tmp = ft_strjoin(*string, content);
@@ -159,7 +144,84 @@ void	ft_string_word(char **string)			// \n or \t word
 	*string = content;
 }
 
-void	ft_string_quote(char **string, char c)		// " or ' word
+void	ft_content(char **string, char *start)
+{
+	char	*content;
+
+	content = ft_substr(start, 0, shell.line - start);
+	if (!content)
+		ft_free_string(string);
+	ft_strjoin_string(string, content);
+}
+
+char	*ft_value_getset(void)
+{
+	char	*start;
+	char	*tmp;
+	char	*content;
+
+	start = shell.line;
+	while (!ft_strchr(">< \t\'\"$|;", *shell.line))
+		shell.line++;
+	tmp = ft_substr(start, 0, shell.line - start);
+	if (!tmp)
+		return (0);
+	content = ft_getset(tmp);
+	free(tmp);
+	return (content);
+}
+
+void	ft_string_env(char **string)
+{
+	char	*start;
+	char	*content;
+	char	*tmp;
+
+	shell.line++;
+	content = 0;
+	if (*shell.line == '?')
+	{
+		content = ft_strdup(ft_itoa(shell.status));
+		if (!content)
+			ft_free_string(string);
+		shell.line++;
+	}
+	else if (*shell.line >= '0' && *shell.line <= '9')
+		shell.line++;
+	else
+		content = ft_value_getset();
+	if (content)
+		ft_strjoin_string(string, content);
+}
+
+void	ft_string_word(char **string)
+{
+	char	*start;
+
+	if (*shell.line == '\\')
+	{
+		start = ++shell.line;
+		shell.line++;
+		ft_content(string, start);
+	}
+	else
+	{
+		start = shell.line;
+		shell.line++;
+		while (!ft_strchr(" \t|><\'\"$;", *shell.line))
+		{
+			if (*shell.line == '\\')
+			{
+				ft_content(string, start);
+				start = ++shell.line;
+			}
+			shell.line++;
+		}
+		ft_content(string, start);
+	}
+}
+
+void	ft_string_quote(char **string, char c)
 {
 	char	*start;
 	char	*content;
@@ -169,31 +231,25 @@ void	ft_string_quote(char **string, char c)		// " or ' word
 	start = shell.line;
 	while (*shell.line != c)
 	{
-		if (*shell.line == '$' && c == '\"')
+		if (*shell.line == '$' && ft_check_set(*(shell.line + 1), c))
 		{
-			content = ft_substr(start, 0, shell.line - start);
-			if (*string)
-			{
-				tmp = ft_strjoin(*string, content);
-				free(*string);
-				free(content);
-				content = tmp;
-			}
-			*string = content;
+			ft_content(string, start);
+			if (!(*string))
+				return ;
 			ft_string_env(string);
 			start = shell.line;
+		}
+		else if (*shell.line == '\\' && ft_check_ecran(*(shell.line + 1), c))
+		{
+			ft_content(string, start);
+			if (!(*string))
+				return ;
+			start = ++shell.line;
+			shell.line++;
 		}
 		else
 			shell.line++;
 	}
-	content = ft_substr(start, 0, shell.line - start);
-	if (*string)
-	{
-		tmp = ft_strjoin(*string, content);
-		free(*string);
-		free(content);
-		content = tmp;
-	}
-	*string = content;
+	ft_content(string, start);
 	shell.line++;
 }

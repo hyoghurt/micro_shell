@@ -39,14 +39,10 @@ void	ft_cmdclear(t_cmd **cmd)
 
 void	ft_free_shell(void)
 {
-	if (shell.line)
-		free(shell.line);
+	//if (shell.line)
+	//	free(shell.line);
 	if (shell.cmd_table)
 		ft_cmdclear(&shell.cmd_table);
-	if (shell.out_file)
-		free(shell.out_file);
-	if (shell.in_file)
-		free(shell.in_file);
 	if (shell.set)
 		ft_free_bi(shell.set);
 	if (shell.pathtkn)

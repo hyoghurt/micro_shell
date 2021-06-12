@@ -8,13 +8,13 @@ void	ft_init_key(void);
 
 void		ft_sig_ctrl_c(int sig)
 {
-	printf("dsfsd\n");
+	printf("in c-c\n");
 }
 
 void	ft_init(char **envp)
 {
+	signal(SIGINT, SIG_IGN);				//signal Ctrl-C
 	signal(SIGINT, ft_sig_ctrl_c);		//signal Ctrl-C
-	//signal(SIGINT, SIG_IGN);				//signal Ctrl-C
 
 	ft_init_struct();						//init struct shell (global varible)
 	ft_init_set(envp);						//copy envp in shell.set
@@ -25,13 +25,9 @@ void	ft_init_struct(void)		//init struct
 	shell.story = 0;
 	shell.line = 0;
 	shell.cmd_table = 0;
-	shell.out_file = 0;
-	shell.in_file = 0;
 	shell.status = 0;
 	shell.set = 0;
 	shell.pathtkn = 0;
-	shell.std.fd_in_file = -1;
-	shell.std.fd_out_file = -1;
 	shell.pid = 0;
 }
 

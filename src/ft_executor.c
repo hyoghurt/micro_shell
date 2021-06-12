@@ -1,135 +1,46 @@
 #include "minishell.h"
 
 int	ft_create_child_process(char **cmd);
-static void	ft_execve(char **cmd);
-
-int	find_redirect_file(char **token)
-{
-	size_t	i;
-	size_t	j;
-
-	j = 0;
-	i = 0;
-	while (token[i])
-	{
-		if (!ft_strncmp(token[i], "<", 2))
-		{
-			if (shell.std.fd_in_file != -1)
-				close(shell.std.fd_in_file);
-			shell.std.fd_in_file = open(token[i + 1], O_RDONLY);
-			if (shell.std.fd_in_file < 0)
-			{
-				ft_putstr_fd("minishell: ", 2);
-				ft_putstr_fd(token[i + 1], 2);
-				ft_putstr_fd(": ", 2);
-				ft_putstr_fd(strerror(errno), 2);
-				ft_putstr_fd("\n", 2);
-				return (1);
-			}
-			i += 2;
-			free(token[i]);
-			free(token[i + 1]);
-		}
-		else
-		{
-			token[j] = token[i];
-			j++;
-			i++;
-		}
-	}
-	token[j] = 0;
-	return (0);
-}
+int	ft_execve(char **cmd);
 
 int		ft_executor(void)
 {
-	t_cmd	*tmp_cmd;
-	int		fdin;
-	int		fdout;
-	int		fdpipe[2];
-	int		tmpin;
-	int		tmpout;
-	int		i;
+	t_cmd	*cmd;
+	int		flag;
 
-	tmp_cmd = shell.cmd_table;				//tmp cmd_table
-
-	tmpin = dup(0);
-	tmpout = dup(1);
-
-	fdin = dup(tmpin);
-
-	while (tmp_cmd)
+	flag = 0;
+	cmd = shell.cmd_table;
+	ft_save_stdin_stdout();
+	ft_fd_start(cmd);
+	while (cmd)
 	{
-		dup2(fdin, 0);
-		close(fdin);
-
-		if (!tmp_cmd->next)
-			fdout = dup(tmpout);
-		else
+		if (find_redirect_file(cmd))
+			flag = 1;
+		if (cmd->fd_in != 0)
+			ft_redirect(cmd->fd_in, shell.std.fd_in);
+		ft_redirect(shell.std.fd_in, 0);
+		if (!cmd->next)
+			ft_fd_end(cmd);
+		else								
+			ft_fd_pipe();
+		if (cmd->fd_out != 1)
+			ft_redirect(cmd->fd_out, shell.std.fd_out);
+		ft_redirect(shell.std.fd_out, 1);
+		if (!flag)
 		{
-			pipe(fdpipe);
-			fdout = fdpipe[1];
-			fdin = fdpipe[0];
-		}
-		dup2(fdout, 1);
-		close(fdout);
-
-		if (ft_create_child_process(tmp_cmd->token))
-			break ;
-		tmp_cmd = tmp_cmd->next;
-	}
-
-	dup2(tmpin, 0);
-	dup2(tmpout, 1);
-	close(tmpin);
-	close(tmpout);
-
-	//kill(shell.pid->pid, SIGINT);
-
-	while (shell.pid)
-	{
-		//printf("pid=%d\n", shell.pid->pid);
-		waitpid(shell.pid->pid, &shell.status, 0);
-		shell.pid = shell.pid->next;
-	}
-
-	return (0);
-}
-
-/*
-int		ft_executor(void)
-{
-	t_cmd	*tmp_cmd;
-
-	tmp_cmd = shell.cmd_table;				//tmp cmd_table
-
-	if (ft_save_stdin_stdout())					//save fd (restore last executor)
-		return (1);
-	if (ft_fd_in())					//open file if have '<', for redirect fd_in
-		return (1);
-	while (tmp_cmd)
-	{
-		if (!find_redirect_file(tmp_cmd->token))
-		{
-			if (ft_redirect_input())			//redirect input
-				return (1);
-			if (!tmp_cmd->next)					//if last command need open file if have '>' fd_out
+			if (ft_create_child_process(cmd->token))
 			{
-				if (ft_fd_out())
-					return (1);
+				ft_killpid();
+				break ;
 			}
-			else								
-				ft_fd_pipe();
-			if (ft_redirect_output())			//redirect output
-				return (1);
-			ft_create_child_process(tmp_cmd->token);	//execve
 		}
-		tmp_cmd = tmp_cmd->next;			//next pipe
+		flag = 0;
+		cmd = cmd->next;
 	}
-	ft_restore_fd();						//restore in/out default
+	ft_restore_fd();
+	ft_waitpid();
 	return (0);
 }
-*/
 
 int		ft_create_child_process(char **cmd)
 {
@@ -138,18 +49,13 @@ int		ft_create_child_process(char **cmd)
 		shell.pathtkn = ft_path_token(cmd);			//valitza posle shell.pathtkn
 		if (!shell.pathtkn)
 		{
-			//wait(0);
-			ft_putstr_fd("minishell: command not found: ", 2);
-			ft_putstr_fd(cmd[0], 2);
-			ft_putstr_fd("\n", 2);
-			shell.pid = 0;
-			kill(0, SIGINT);
-			
+			ft_print_string("minishell", "command not found", cmd[0]);
 			return (1);
 		}
 		else
 		{
-			ft_execve(cmd);
+			if (ft_execve(cmd))
+				return (1);
 			free(shell.pathtkn);
 			shell.pathtkn = 0;
 		}
@@ -157,58 +63,41 @@ int		ft_create_child_process(char **cmd)
 	//}
 }
 
-t_pid	*ft_pidnew(int n)
-{
-	t_pid	*new;
-
-	new = (t_pid*)malloc(sizeof(t_pid));
-	if (!new)
-		return (0);
-	new->pid = n;
-	new->next = 0;
-	return (new);
-}
-
-void	ft_addpid_back(t_pid **pid, t_pid *new)
-{
-	t_pid	*tmp;
-
-	tmp = *pid;
-	if (!tmp)
-		*pid = new;
-	else
-	{
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-}
-
-static void	ft_execve(char **cmd)
+int	ft_execve(char **cmd)
 {
 	pid_t	pid;
 	t_pid	*new;
+	int		ret;
 
+	ret = 0;
 	pid = fork();
-
-	if (pid < 0)									//error fork
+	if (pid < 0)
+		ft_print_string("minishell", "pid", strerror(errno));
+	if (pid == 0)
 	{
-		ft_putstr_fd("minishell: pid: ", 2);
-		ft_putstr_fd(strerror(errno), 2);
-		ft_putstr_fd("\n", 2);
-	}
-	if (pid == 0)										//process child
-	{
-		signal(SIGINT, SIG_DFL);				//signal Ctrl-C
+		signal(SIGINT, SIG_DFL);
 		if (execve(shell.pathtkn, cmd, shell.set) == -1)
-		{
-			ft_putstr_fd(cmd[0], 2);
-			ft_putstr_fd(": ", 2);
-			ft_putstr_fd(strerror(errno), 2);
-			ft_putstr_fd("\n", 2);
-		}
-		exit(1);										//stop process child
+			ft_print_string("minishell", "execve", strerror(errno));
+		exit(1);
 	}
 	new = ft_pidnew(pid);
 	ft_addpid_back(&shell.pid, new);
+	/*
+	int	status;
+	status = 0;
+	waitpid(pid, &status, WUNTRACED | WCONTINUED);
+	if (WIFEXITED(status))
+	{
+		t_pid	*my_p;
+		my_p = shell.pid;
+		while (my_p)
+		{
+			//printf("my_pid=%d\n", my_p->pid);
+			kill(my_p->pid, SIGINT);
+			my_p = my_p->next;
+		}
+		return (1);
+	}
+	*/
+	return (0);
 }

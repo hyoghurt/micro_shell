@@ -1,37 +1,35 @@
 #include "minishell.h"
 
+//brew install readline
+
 void	ft_finish_executor(void);
 
 int		main(int argc, char **argv, char **envp)
 {
 	char *s;
+	t_list	*new;
 
-	ft_init(envp);							//init terminal, init struct, save code key, copy envp in shell.set
-	while (1)								//loop for new command string
+	ft_init(envp);
+	while (1)
 	{
 		s = readline("\033[1;48;5;58mUSER > \033[0m");
 		if (s && *s)
 			add_history(s);
-		shell.line = ft_strdup(s);
+		new = ft_lstnew(s);
+		ft_lstadd_back(&shell.story, new);
+		shell.line = s;
 		if (!ft_lexer())
 		{
 			ft_parser();					//parser shell.line (create shell.cmd_table)
-			//if (shell.cmd_table)
 			ft_executor();				//PROCESING (use shell.cmd_table)
-			ft_finish_executor();			//clear memory (clear(shell.cmd_table) free(shell.out_file) free(in_file)
+			ft_finish_executor();			//clear memory (clear(shell.cmd_tabable
 		}
+		else
+			ft_putstr_fd("minishell: syntax error\n", 2);
 	}
 }
 
 void	ft_finish_executor(void)
 {
 	ft_cmdclear(&shell.cmd_table);
-	if (shell.in_file)
-		free(shell.in_file);
-	if (shell.out_file)
-		free(shell.out_file);
-	shell.in_file = 0;
-	shell.out_file = 0;
-	shell.std.fd_in = 0;
-	shell.std.fd_out = 1;
 }

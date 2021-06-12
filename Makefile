@@ -1,5 +1,5 @@
 NAME			= minishell
-SRC				= main.c ft_init.c ft_parser.c ft_exit.c ft_executor.c ft_add.c ft_path.c ft_lexer.c ft_debag.c ft_story.c ft_builtin.c ft_fd.c
+SRC				= main.c ft_init.c ft_parser.c ft_exit.c ft_executor.c ft_add.c ft_path.c ft_lexer.c ft_debag.c ft_story.c ft_builtin.c ft_fd.c ft_lstpid.c ft_exec_add.c ft_exec_redirect.c
 SRCDIR			= src
 OBJDIR			= obj
 OBJ				= $(addprefix $(OBJDIR)/,$(notdir $(SRC:.c=.o)))
@@ -8,7 +8,7 @@ CFLAGS			= -Wall -Wextra -Werror
 
 $(NAME):		$(OBJ)
 				make -C libft
-				$(CC) $(OBJ) -ltermcap -lncurses -lreadline -Llibft -lft -o $(NAME) 
+				$(CC) $(OBJ) -ltermcap -lncurses -lreadline -Llibft -lft -L/Users/hyoghurt/.brew/opt/readline/lib -o $(NAME) 
 
 ##-lncurses
 
@@ -16,7 +16,7 @@ $(OBJDIR):
 				mkdir -p $@
 
 $(OBJDIR)/%.o:	$(SRCDIR)/%.c | $(OBJDIR)
-				$(CC) -I. -Ilibft -c -MD $< -o $@
+				$(CC) -I. -Ilibft -I/Users/hyoghurt/.brew/opt/readline/include -c -MD $< -o $@
 
 include $(wildcard $(OBJDIR)/*.d)
 

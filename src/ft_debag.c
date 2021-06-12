@@ -7,13 +7,13 @@ void	debag_check_shell_line(void)
 
 void	debag_check_story(void)
 {
-	t_story	*tmp;
+	t_list	*tmp;
 
 	tmp = shell.story;
 
 	while (tmp)
 	{
-		printf("story=%s\n", tmp->str);
+		printf("story=%s\n", tmp->content);
 		tmp = tmp->next;
 	}
 }

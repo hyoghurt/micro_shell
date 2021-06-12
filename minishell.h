@@ -39,13 +39,13 @@ typedef struct		s_fd			//fd
 	int				tmp_out;		//save stdout (1) need for restore stdout
 	int				fd_in;
 	int				fd_out;
-	int				fd_in_file;
-	int				fd_out_file;
 }					t_fd;
 
 typedef struct		s_cmd			//command
 {
 	char			**token;		//array command (example: cmd1 | cmd2 | cmd3)
+	int				fd_in;
+	int				fd_out;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -67,7 +67,7 @@ typedef struct		s_shell			//general
 {
 	struct termios	termios_p;		//standart terminal config
 
-	struct s_story	*story;			//story
+	t_list			*story;			//story
 	struct s_story	*move_story;	//save pointer for move story
 	int				fg_mv_story;	//flag for story move
 
@@ -78,16 +78,13 @@ typedef struct		s_shell			//general
 	char			*line;			//string command
 	char			**set;			//set variable (init: copy envp in set)
 
-	char			*out_file;		//file stdout
-	char			*in_file;		//file stdin
-
 	char			*pathtkn;		//path_token for execve (execve(pathtkn, cmd_table->token, set)) (path command)
 
 	int				status;			//status exit
 	t_pid			*pid;
 }					t_shell;
 
-t_shell				shell;
+t_shell		shell;
 
 t_story		*ft_story_new(char *str);
 void		ft_story_add_back(t_story **story, t_story *new);
@@ -104,9 +101,14 @@ void	ft_read(void);
 void	ft_parser(void);
 int		ft_executor(void);
 
+int		find_redirect_file(t_cmd *cmd);
+void	ft_waitpid(void);
+void	ft_killpid(void);
+
 void	ft_free_bi(char **s);
 int		ft_putint(int c);
 int		ft_print_error(void);
+void	ft_print_string(char *s1, char *s2, char *s3);
 int		ft_exit(char *msg, char *s);
 
 void	ft_sig_ctrl_c(int sig);
@@ -124,12 +126,14 @@ void	ft_init_shell_line(void);
 int		ft_lexer(void);
 
 int		ft_save_stdin_stdout(void);
-int		ft_fd_in(void);
-int		ft_fd_out(void);
+int		ft_fd_start(t_cmd *cmd);
+int		ft_fd_end(t_cmd *cmd);
 void	ft_fd_pipe(void);
 int		ft_redirect_input(void);
 int		ft_redirect_output(void);
 void	ft_restore_fd(void);
+int		ft_redirect(int one, int two);
+int		ft_redirect_std(int one, int two);
 
 void	debag_check_token(void);
 void	debag_check_status(void);
@@ -139,6 +143,9 @@ void	debag_check_story(void);
 int		ft_fn_selector(void);
 void	ft_builtin(void);
 
-
+///t_pid
+t_pid	*ft_pidnew(int n);
+void	ft_addpid_back(t_pid **pid, t_pid *new);
+void	ft_pidclear(t_pid **pid);
 
 #endif

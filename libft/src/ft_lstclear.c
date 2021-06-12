@@ -6,7 +6,7 @@
 /*   By: hyoghurt <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/13 14:01:33 by hyoghurt          #+#    #+#             */
-/*   Updated: 2021/02/10 22:14:53 by hyoghurt         ###   ########.fr       */
+/*   Updated: 2021/06/11 11:29:27 by hyoghurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,5 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 		del(bg->content);
 		free(bg);
 	}
+	*lst = 0;
 }
