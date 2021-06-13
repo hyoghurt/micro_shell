@@ -8,12 +8,12 @@ int	ft_check_pipe_error(void)
 	s = shell.line;
 	while (ft_strchr(" \t", *s))
 		s++;
-	if (*s == '|')
+	if (*s == '|' || *s == ';')
 		return (1);
 	tmp = ft_strrchr(s, '|');
 	if (tmp)
 	{
-		if (*(tmp - 1) == '\\')
+		if (shell.line != tmp && *(tmp - 1) == '\\')
 			return (0);
 		tmp++;
 		while (*tmp && ft_strchr(" \t", *tmp))
@@ -37,7 +37,7 @@ int	ft_check_multiline(void)
 	}
 	return (0);
 }
-
+/*
 void	ft_check_quote_a(char c, int *one, int *two, char c2)
 {
 	if (c == '\'' && !(*one) && !(*two) && c2 != '\\')
@@ -73,9 +73,98 @@ int	ft_check_quote(void)
 		return (1);
 	return (0);
 }
-
-int	ft_check_redirect(void)
+*/
+int	ft_lexer_quote(char **s)
 {
+	char	*tmp;
+
+	tmp = *s;
+	tmp++;
+	while (*tmp && *tmp != '\'')
+		tmp++;
+	while (*tmp && (*tmp == ' ' || *tmp == '\t'))
+		tmp++;
+	if (*tmp == '\0')
+		return (1);
+	tmp++;
+	*s = tmp;
+	return (0);
+}
+
+int	ft_lexer_quote_2(char **s)
+{
+	char	*tmp;
+
+	tmp = *s;
+	tmp++;
+	while (*tmp && *tmp != '\"')
+	{
+		tmp++;
+		if (*tmp && *tmp == '\"' && tmp != shell.line && *(tmp - 1) == '\\')
+			tmp++;
+	}
+	while (*tmp && (*tmp == ' ' || *tmp == '\t'))
+		tmp++;
+	if (*tmp == '\0')
+		return (1);
+	tmp++;
+	*s = tmp;
+	return (0);
+}
+
+int	ft_lexer_redirect(char **s)
+{
+	char	*tmp;
+
+	tmp = *s;
+	tmp++;
+	if (*tmp && *tmp == '>')
+		tmp++;
+	while (*tmp && (*tmp == ' ' || *tmp == '\t'))
+		tmp++;
+	if (*tmp == '\0' || *tmp == '<' || *tmp == '>' || *tmp == '|' || *tmp == ';')
+		return (1);
+	tmp++;
+	*s = tmp;
+	return (0);
+}
+
+int	ft_lexer_next(char **s)
+{
+	char	*tmp;
+
+	tmp = *s;
+	tmp++;
+	while (*tmp && (*tmp == ' ' || *tmp == '\t'))
+		tmp++;
+	if (*tmp && *tmp == ';')
+		return (1);
+	*s = tmp;
+	return (0);
+}
+
+int	ft_check_lexer(void)
+{
+	char	*s;
+
+	s = shell.line;
+	while (*s)
+	{
+		if (*s == '\\')
+			s += 2;
+		else if (*s == '\'' && ft_lexer_quote(&s))
+			return (1);
+		else if (*s == '\"' && ft_lexer_quote_2(&s))
+			return (1);
+		else if (*s == ';' && ft_lexer_next(&s))
+			return (1);
+		else if (*s == '<' || *s == '>')
+		{
+			if (ft_lexer_redirect(&s))
+				return (1);
+		}
+		s++;
+	}
 	return (0);
 }
 
@@ -85,9 +174,7 @@ int		ft_lexer(void)
 		return (1);
 	if (ft_check_multiline())
 		return (1);
-	if (ft_check_quote())
-		return (1);
-	if (ft_check_redirect())
+	if (ft_check_lexer())
 		return (1);
 	return (0);
 }
