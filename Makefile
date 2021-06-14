@@ -8,7 +8,7 @@ CFLAGS			= -Wall -Wextra -Werror
 
 $(NAME):		$(OBJ)
 				make -C libft
-				$(CC) $(OBJ) -ltermcap -lncurses -lreadline -Llibft -lft -L/Users/hyoghurt/.brew/opt/readline/lib -o $(NAME) 
+				$(CC) $(OBJ) -ltermcap -lncurses -lreadline -Llibft -lft -o $(NAME) 
 
 ##-lncurses
 
@@ -16,7 +16,7 @@ $(OBJDIR):
 				mkdir -p $@
 
 $(OBJDIR)/%.o:	$(SRCDIR)/%.c | $(OBJDIR)
-				$(CC) -I. -Ilibft -I/Users/hyoghurt/.brew/opt/readline/include -c -MD $< -o $@
+				$(CC) -I. -Ilibft -c -MD $< -o $@
 
 include $(wildcard $(OBJDIR)/*.d)
 
