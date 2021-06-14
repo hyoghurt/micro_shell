@@ -21,22 +21,6 @@ void	ft_free_bi(char **s)
 	*s = 0;
 }
 
-void	ft_cmdclear(t_cmd **cmd)
-{
-	t_cmd	*tmp;
-	t_cmd	*bg;
-
-	tmp = *cmd;
-	while (tmp)
-	{
-		bg = tmp;
-		tmp = tmp->next;
-		ft_free_bi(bg->token);
-		free(bg);
-	}
-	*cmd = 0;
-}
-
 void	ft_free_shell(void)
 {
 	//if (shell.line)

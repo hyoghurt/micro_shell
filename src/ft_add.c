@@ -57,37 +57,6 @@ char	**ft_cpy_array_bi(char **s1, char **s2)
 	return (s1);
 }
 
-t_cmd	*ft_cmdnew(char	**token)
-{
-	t_cmd	*new;
-
-	if (!token)
-		return (0);
-	new = (t_cmd*)malloc(sizeof(t_cmd));
-	if (!new)
-		return (0);
-	new->token = token;
-	new->next = 0;
-	new->fd_in = 0;
-	new->fd_out = 1;
-	return (new);
-}
-		
-void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new)
-{
-	t_cmd	*tmp;
-
-	tmp = *cmd;
-	if (!tmp)
-		*cmd = new;
-	else
-	{
-		while(tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-}
-
 char	**ft_crt_arr_bi_from_list(t_list *list)
 {
 	size_t	size;
