@@ -44,8 +44,8 @@ int		ft_executor(void)
 
 int		ft_create_child_process(char **cmd)
 {
-	//if (!ft_fn_selector())
-	//{
+	if (!ft_fn_selector())
+	{
 		shell.pathtkn = ft_path_token(cmd);			//valitza posle shell.pathtkn
 		if (!shell.pathtkn)
 		{
@@ -60,7 +60,8 @@ int		ft_create_child_process(char **cmd)
 			shell.pathtkn = 0;
 		}
 		return (0);
-	//}
+	}
+	return (0);
 }
 
 int	ft_execve(char **cmd)

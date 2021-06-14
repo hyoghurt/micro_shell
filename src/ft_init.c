@@ -17,7 +17,13 @@ void	ft_init(char **envp)
 	signal(SIGINT, ft_sig_ctrl_c);		//signal Ctrl-C
 
 	ft_init_struct();						//init struct shell (global varible)
+	ft_init_termtype();
+	if (tcgetattr(0, &shell.termios_p) != 0)
+		ft_exit("tcgetattr", "err_tcgetattr");
+	ft_init_key();							//init key
 	ft_init_set(envp);						//copy envp in shell.set
+	shell.user = getenv("USER");
+	
 }
 
 void	ft_init_struct(void)		//init struct
@@ -29,6 +35,32 @@ void	ft_init_struct(void)		//init struct
 	shell.set = 0;
 	shell.pathtkn = 0;
 	shell.pid = 0;
+}
+
+void	ft_init_termios(void)		//setting terminal for my
+{
+	struct termios	termios_temp;
+
+	if (tcgetattr(0, &termios_temp) != 0)
+		ft_exit("tcgetattr", "err_tcgetattr");
+	//ft_memcpy(&shell.termios_p, &termios_temp, sizeof(termios_temp));
+	termios_temp.c_lflag &= ~(ECHO|ICANON);
+	termios_temp.c_cc[VMIN] = 1;
+	termios_temp.c_cc[VTIME] = 0;
+	if (tcsetattr(0, TCSANOW, &termios_temp) != 0)
+		ft_exit("tcgetattr", "error");
+}
+
+void	ft_init_termtype(void)		//init terminal
+{
+	char	*termtype;
+	char	term_buffer[2048];
+
+	termtype = getenv("TERM");
+	if (!termtype)
+		ft_exit("termtype", "err_tcgetattr");
+	if (tgetent(term_buffer, termtype) <= 0)
+		ft_exit("tgetent", "err_tcgetattr");
 }
 
 void	ft_init_set(char **envp)	//copy envp in shell.set
@@ -71,4 +103,28 @@ void	ft_init_shell_line(void)   //do recalloc shell.line
 		shell.line = ft_calloc(1, (BUF_SIZE * 2));
 	if (!shell.line)
 		ft_exit("malloc in init_shell_line", "error");
+}
+
+void	ft_init_key(void)						//save code key in struct
+{
+	shell.key.dl		= tgetstr("dl", 0);		//clear line
+	shell.key.dc		= tgetstr("dc", 0);		//kursor left
+	//shell.key.down	= tgetstr("do", 0);
+	//shell.down		= tgetstr("kd", 0);
+	shell.key.down		= "\033[B";
+	//shell.right		= tgetstr("nd", 0);
+	//shell.left		= tgetstr("le", 0);
+	//shell.left		= tgetstr("kl", 0);
+	//shell.left		= "\033[D";
+	shell.key.up		= tgetstr("up", 0);
+	shell.key.backsp	= "\033^?";
+	//shell.key.backsp	= "\033^H";
+	//shell.key.backsp	= tgetstr("kb", 0);
+	//shell.key.co		= tgetnum("co");
+	//shell.key.li		= tgetnum("li");
+	shell.key.rc		= tgetstr("rc", 0);		//restore "sc" position
+	shell.key.cd		= tgetstr("cd", 0);
+	shell.key.sc		= tgetstr("sc", 0);		//save cursor position
+	//if (!shell.dl || !shell.down || !shell.up || !shell.backsp)	//write
+	//	ft_exit ("tgetstr", "error");
 }

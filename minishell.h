@@ -17,38 +17,40 @@
 # include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
-//install libreadline-dev
-
+//story______________________________________
 typedef struct		s_story			//story
 {
 	char			*str;
 	struct s_story	*back;
 	struct s_story	*next;
 }					t_story;
-
+//////////////////////////////////////////////
+//pid_________________________________________
 typedef struct		s_pid
 {
 	int				pid;
 	struct s_pid	*next;
 }					t_pid;
-
+//////////////////////////////////////////////
+//fd__________________________________________
 typedef struct		s_fd			//fd
 {
-	int				tmp_in;			//save stdin (0) need for restore stdin
-	int				tmp_out;		//save stdout (1) need for restore stdout
+	int				tmp_in;
+	int				tmp_out;
 	int				fd_in;
 	int				fd_out;
 }					t_fd;
-
-typedef struct		s_cmd			//command
+//////////////////////////////////////////////
+//command (cmd1 | cmd2 | ...)_________________
+typedef struct		s_cmd
 {
-	char			**token;		//array command (example: cmd1 | cmd2 | cmd3)
+	char			**token;
 	int				fd_in;
 	int				fd_out;
 	struct s_cmd	*next;
 }					t_cmd;
-
+//////////////////////////////////////////////
+//key_________________________________________
 typedef struct		s_key			//key
 {
 	char			*up;			//key up
@@ -62,30 +64,37 @@ typedef struct		s_key			//key
 	int				co;				//sum column
 	int				li;				//sum row
 }					t_key;
-
-typedef struct		s_shell			//general
+//////////////////////////////////////////////
+//general_____________________________________
+typedef struct		s_shell
 {
 	struct termios	termios_p;		//standart terminal config
-
-	t_list			*story;			//story
+	//story
+	struct s_story	*story;			//story
 	struct s_story	*move_story;	//save pointer for move story
 	int				fg_mv_story;	//flag for story move
-
-	struct s_cmd	*cmd_table;		//table tokens (cmd_table->token | cmd_table->next->token ...)
-	struct s_fd		std;			//fd (need for pipe)
-	struct s_key	key;			//code key
-
-	char			*line;			//string command
-	char			**set;			//set variable (init: copy envp in set)
-
-	char			*pathtkn;		//path_token for execve (execve(pathtkn, cmd_table->token, set)) (path command)
-
-	int				status;			//status exit
-	t_pid			*pid;
+	//cmd
+	struct s_cmd	*cmd_table;
+	//fd
+	struct s_fd		std;
+	//key
+	struct s_key	key;
+	//pid
+	struct s_pid	*pid;
+	//line
+	char			*line;
+	//set
+	char			**set;
+	//pathtoken
+	char			*pathtkn;
+	//status
+	int				status;
+	//getenv(user) need for promt
+	char			*user;
 }					t_shell;
-
+//////////////////////////////////////////////
 t_shell		shell;
-
+//////////////////////////////////////////////
 t_story		*ft_story_new(char *str);
 void		ft_story_add_back(t_story **story, t_story *new);
 void		ft_story_add_front(t_story **story, t_story *new);
@@ -147,5 +156,10 @@ void	ft_builtin(void);
 t_pid	*ft_pidnew(int n);
 void	ft_addpid_back(t_pid **pid, t_pid *new);
 void	ft_pidclear(t_pid **pid);
+
+void	ft_init_termtype(void);
+void	ft_init_termios(void);
+
+
 
 #endif

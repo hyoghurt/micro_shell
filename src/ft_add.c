@@ -1,5 +1,23 @@
 #include "minishell.h"
 
+int	ft_set_prompt(void)
+{
+	ft_putstr_fd ("\033[1;48;5;58m", 1);
+	if (shell.user)
+		ft_putstr_fd (shell.user, 1);
+	else
+		ft_putstr_fd ("USER", 1);
+	ft_putstr_fd (" > \033[0m", 1);
+	tputs(shell.key.sc, 1, ft_putint);	//save cursor position (need for backspace and move story)
+	return (0);
+}
+
+int		ft_putint(int c)
+{
+	write(1, &c, 1);
+	return (1);
+}
+
 void	ft_print_string(char *s1, char *s2, char *s3)
 {
 	ft_putstr_fd(s1, 2);
