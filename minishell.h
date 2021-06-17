@@ -1,6 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # define BUF_SIZE 16
+# define REDIR_MY "./src/redirect_tmp"
 
 # include "libft.h"
 # include <stdio.h>
@@ -47,6 +48,8 @@ typedef struct		s_cmd
 	char			**token;
 	int				fd_in;
 	int				fd_out;
+	char			*fd_in_file;
+	char			*fd_out_file;
 	struct s_cmd	*next;
 }					t_cmd;
 //////////////////////////////////////////////
@@ -91,6 +94,11 @@ typedef struct		s_shell
 	int				status;
 	//getenv(user) need for promt
 	char			*user;
+	//redirect tmp varible
+	int				fd_in;
+	int				fd_out;
+	char			*fd_in_file;
+	char			*fd_out_file;
 }					t_shell;
 //////////////////////////////////////////////
 t_shell		shell;
@@ -105,7 +113,7 @@ void		ft_cmdadd_back(t_cmd **cmd, t_cmd *new);
 void		ft_cmdclear(t_cmd **cmd);
 
 void	ft_init(char **envp);
-int		ft_set_prompt(void);
+void	ft_start(void);
 void	ft_read(void);
 void	ft_parser(void);
 int		ft_executor(void);
@@ -133,6 +141,7 @@ char	*ft_path_token(char **cmd);
 void	ft_init_shell_line(void);
 
 int		ft_lexer(void);
+int		ft_check_lexer(void);
 
 int		ft_save_stdin_stdout(void);
 int		ft_fd_start(t_cmd *cmd);
@@ -157,9 +166,22 @@ t_pid	*ft_pidnew(int n);
 void	ft_addpid_back(t_pid **pid, t_pid *new);
 void	ft_pidclear(t_pid **pid);
 
-void	ft_init_termtype(void);
-void	ft_init_termios(void);
 
+void	ft_string_ecran(char **string);
+void	ft_string_status(char **string);
+void	ft_string_env(char **string);
+void	ft_string_word(char **string);
+void	ft_string_quote(char **string, char c);
 
+void	ft_strjoin_string(char **string, char *content);
+void	ft_content(char **string, char *start);
+int		ft_check_set(char check);
+char	*ft_value_getset(void);
+
+void	ft_parser_redirect(void);
+void	ft_free_string(char **string);
+
+void	ft_crt_lst(t_list **list);
+char	*ft_crt_string(void);
 
 #endif
