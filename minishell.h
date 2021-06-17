@@ -158,9 +158,6 @@ void	debag_check_status(void);
 void	debag_check_shell_line(void);
 void	debag_check_story(void);
 
-int		ft_fn_selector(void);
-void	ft_builtin(void);
-
 ///t_pid
 t_pid	*ft_pidnew(int n);
 void	ft_addpid_back(t_pid **pid, t_pid *new);
@@ -183,5 +180,10 @@ void	ft_free_string(char **string);
 
 void	ft_crt_lst(t_list **list);
 char	*ft_crt_string(void);
+
+///Built-in
+int		ft_unset(void);
+int		ft_fn_selector(void);
+void	ft_builtin(void);
 
 #endif

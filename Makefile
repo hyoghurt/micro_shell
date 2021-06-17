@@ -1,5 +1,27 @@
 NAME			= minishell
-SRC				= main.c ft_init.c ft_parser.c ft_parser_str.c ft_parser_str_quote.c ft_parser_redirect.c ft_parser_add.c ft_exit.c ft_executor.c ft_add.c ft_path.c ft_lexer.c ft_debag.c ft_struct_story.c ft_builtin.c ft_fd.c ft_struct_pid.c ft_exec_add.c ft_exec_redirect.c ft_read.c ft_key.c ft_struct_cmd.c ft_signal.c ft_start.c ft_lexer_2.c
+SRC				=	main.c	\
+					ft_debag.c \
+					ft_init.c \
+					ft_key.c \
+					ft_start.c \
+					ft_read.c \
+					ft_parser.c \
+					ft_exit.c \
+					ft_add.c \
+					ft_path.c \
+					ft_lexer.c \
+					ft_lexer_2.c \
+					ft_builtin.c \
+					ft_builtin2.c \
+					ft_fd.c \
+					ft_executor.c \
+					ft_exec_add.c \
+					ft_exec_redirect.c \
+					ft_struct_cmd.c \
+					ft_struct_story.c \
+					ft_struct_pid.c \
+					ft_signal.c \
+
 SRCDIR			= src
 OBJDIR			= obj
 OBJ				= $(addprefix $(OBJDIR)/,$(notdir $(SRC:.c=.o)))

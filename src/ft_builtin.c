@@ -51,6 +51,35 @@ int		ft_env(void)
 	return (1);
 }
 
+int		ft_export()
+{
+	int	n;
+	int i;
+	int j;
+	char **env_var;
+
+	i = 0;
+	j = 0;
+	n = ft_array_len(shell.set);
+	//while (shell.cmd_table->token[j++]);
+	env_var = malloc(n+2);
+	while(shell.set[i])
+	{
+		env_var[i] = shell.set[i];
+		i++;
+	}
+	// while (shell.cmd_table->token[j++])
+	// {
+	// 	env_var[i++] = ft_strdup(shell.cmd_table->token[j++]);
+	// }
+	env_var[i++] = ft_strdup(shell.cmd_table->token[1]);
+	env_var[i] = 0;
+	free(shell.set);
+	shell.set = env_var;
+	printf("%s\n", "Wanna export?");
+	return (1);
+}
+
 int		ft_pwd(void)
 {
 	char *pwd;
@@ -65,6 +94,7 @@ int		ft_pwd(void)
 
 int		ft_fn_selector(void)
 {
+
 	if (!ft_strncmp(shell.cmd_table->token[0], "echo", 5))
 		return (ft_echo());
 	if (!ft_strncmp(shell.cmd_table->token[0], "cd", 3))
@@ -75,5 +105,9 @@ int		ft_fn_selector(void)
 		return (ft_exit(0,0));
 	if (!ft_strncmp(shell.cmd_table->token[0], "env", 4))
 		return (ft_env());
+	if (!ft_strncmp(shell.cmd_table->token[0], "export", 7))
+		return (ft_export());
+	if (!ft_strncmp(shell.cmd_table->token[0], "unset", 6))
+		return (ft_unset());
 	return (0);
 }
