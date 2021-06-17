@@ -31,7 +31,12 @@ void	debag_check_token(void)
 		i = 0;
 		while (s[i])
 		{
-			printf("\e[1;38;5;10mtoken[%d]=\t[%s]\e[0m\n", i, s[i]);
+			printf("\e[1;38;5;10mtoken[%d]=\t[%s]\e[0m", i, s[i]);
+			printf("\t[fd_in]=%d ", tmp->fd_in);
+			printf("[fd_in_file]=[%s]", tmp->fd_in_file);
+			printf("\t[fd_out]=%d ", tmp->fd_out);
+			printf("[fd_out_file]=[%s]", tmp->fd_out_file);
+			printf("\n");
 			i++;
 		}
 		printf("\n");

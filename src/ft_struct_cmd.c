@@ -11,8 +11,10 @@ t_cmd	*ft_cmdnew(char	**token)
 		return (0);
 	new->token = token;
 	new->next = 0;
-	new->fd_in = 0;
-	new->fd_out = 1;
+	new->fd_in = shell.fd_in;
+	new->fd_out = shell.fd_out;
+	new->fd_in_file = shell.fd_in_file;
+	new->fd_out_file = shell.fd_out_file;
 	return (new);
 }
 		
@@ -42,6 +44,10 @@ void	ft_cmdclear(t_cmd **cmd)
 		bg = tmp;
 		tmp = tmp->next;
 		ft_free_bi(bg->token);
+		if (bg->fd_in_file)
+			free(bg->fd_in_file);
+		if (bg->fd_out_file)
+			free(bg->fd_out_file);
 		free(bg);
 	}
 	*cmd = 0;

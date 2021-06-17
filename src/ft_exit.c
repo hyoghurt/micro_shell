@@ -31,6 +31,9 @@ void	ft_free_shell(void)
 		ft_free_bi(shell.set);
 	if (shell.pathtkn)
 		free(shell.pathtkn);
+	if (shell.story)
+		ft_story_clear(&shell.story);
+
 }
 
 int		ft_exit(char *msg, char *s)
@@ -40,10 +43,7 @@ int		ft_exit(char *msg, char *s)
 	ret = 0;
 	ft_free_shell();
 	if (msg)
-	{
 		ft_putstr_fd(msg, 2);
-		ft_putstr_fd(": ", 2);
-	}
 	if (s)
 	{
 		ret = ft_print_error();

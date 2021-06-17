@@ -1,17 +1,5 @@
 #include "minishell.h"
 
-int	ft_set_prompt(void)
-{
-	ft_putstr_fd ("\033[1;48;5;58m", 1);
-	if (shell.user)
-		ft_putstr_fd (shell.user, 1);
-	else
-		ft_putstr_fd ("USER", 1);
-	ft_putstr_fd (" > \033[0m", 1);
-	tputs(shell.key.sc, 1, ft_putint);	//save cursor position (need for backspace and move story)
-	return (0);
-}
-
 int		ft_putint(int c)
 {
 	write(1, &c, 1);
@@ -104,3 +92,30 @@ char	*ft_getset(char *str)
 	}
 	return (0);
 }
+
+void	ft_init_shell_line(void)
+{
+	size_t	len;
+	size_t	rest;
+	size_t	whole;
+	char	*tmp;
+
+	if (shell.line)
+	{
+		len = ft_strlen(shell.line);
+		rest = len % BUF_SIZE;
+		whole = len / BUF_SIZE;
+		if (whole >= 1 && rest == 2)
+		{
+			tmp = (char*)malloc((whole + 2) * BUF_SIZE);
+			ft_strlcpy(tmp, shell.line, len + 1);
+			free(shell.line);
+			shell.line = tmp;
+		}
+	}
+	else
+		shell.line = ft_calloc(1, (BUF_SIZE * 2));
+	if (!shell.line)
+		ft_exit("minishell: init_shell_line: malloc: ", "error");
+}
+
