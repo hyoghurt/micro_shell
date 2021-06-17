@@ -107,6 +107,8 @@ t_story		*ft_story_new(char *str);
 void		ft_story_add_back(t_story **story, t_story *new);
 void		ft_story_add_front(t_story **story, t_story *new);
 void		ft_story_clear(t_story **story);
+void		ft_story_del_front(t_story **story);
+
 
 t_cmd		*ft_cmdnew(char **token);
 void		ft_cmdadd_back(t_cmd **cmd, t_cmd *new);

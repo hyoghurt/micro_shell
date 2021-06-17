@@ -1,6 +1,7 @@
 #include "minishell.h"
 
 void	ft_finish_executor(void);
+int		ft_check_line(void);
 
 int		main(int argc, char **argv, char **envp)
 {
@@ -9,21 +10,45 @@ int		main(int argc, char **argv, char **envp)
 	{
 		ft_start();
 		ft_read();
-		if (!ft_lexer())
+		if (!ft_check_line())
 		{
-			while (*shell.line)
+			if (ft_lexer())
+				ft_putstr_fd("minishell: syntax error\n", 2);
+			else
 			{
-				ft_parser();
-				if (shell.cmd_table)
-					ft_executor();
-				if (*shell.line == ';')
-					shell.line++;
-				ft_finish_executor();
+				while (*shell.line)
+				{
+					ft_parser();
+					if (shell.cmd_table)
+						ft_executor();
+					if (*shell.line == ';')
+						shell.line++;
+					ft_finish_executor();
+				}
 			}
 		}
-		else
-			ft_putstr_fd("minishell: syntax error\n", 2);
 	}
+}
+
+int		ft_check_line(void)
+{
+	char	*s;
+	size_t	i;
+
+	if (shell.line)
+	{
+		i = 0;
+		s = shell.line;
+		while (s[i] == ' ' || s[i] == '\t')
+			i++;
+		if (!s[i])
+		{
+			ft_story_del_front(&shell.story);
+			return (1);
+		}
+		return (0);
+	}
+	return (1);
 }
 
 void	ft_finish_executor(void)

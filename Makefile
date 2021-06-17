@@ -6,6 +6,10 @@ SRC				=	main.c	\
 					ft_start.c \
 					ft_read.c \
 					ft_parser.c \
+					ft_parser_add.c \
+					ft_parser_redirect.c \
+					ft_parser_str.c \
+					ft_parser_str_quote.c \
 					ft_exit.c \
 					ft_add.c \
 					ft_path.c \

@@ -43,7 +43,8 @@ void	ft_cmdclear(t_cmd **cmd)
 	{
 		bg = tmp;
 		tmp = tmp->next;
-		ft_free_bi(bg->token);
+		if (bg->token)
+			ft_free_bi(bg->token);
 		if (bg->fd_in_file)
 			free(bg->fd_in_file);
 		if (bg->fd_out_file)

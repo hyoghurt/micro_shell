@@ -29,6 +29,10 @@ void	ft_init_struct(void)
 	shell.set = 0;
 	shell.pathtkn = 0;
 	shell.pid = 0;
+	shell.fd_in = 0;
+	shell.fd_out = 1;
+	shell.fd_in_file = 0;
+	shell.fd_out_file = 0;
 }
 
 void	ft_init_termtype(void)

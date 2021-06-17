@@ -27,6 +27,24 @@ void	ft_story_add_front(t_story **story, t_story *new)
 	}
 }
 
+void	ft_story_del_front(t_story **story)
+{
+	t_story		*tmp;
+	t_story		*bg;
+
+	tmp = *story;
+	if (tmp)
+	{
+		bg = tmp;
+		tmp = tmp->next;
+		if (bg->str)
+			free(bg->str);
+		free(bg);
+		tmp->back = 0;
+		*story = tmp;
+	}
+}
+
 void	ft_story_add_back(t_story **story, t_story *new)
 {
 	t_story		*tmp;
