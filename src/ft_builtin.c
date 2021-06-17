@@ -15,15 +15,13 @@ int		ft_echo(void)
 	}
 	while (shell.cmd_table->token[i] != 0)
 	{
-		ft_putstr_fd(shell.cmd_table->token[i],1);
-		if (shell.cmd_table->token[i+1] != 0)
-		{
+		ft_putstr_fd(shell.cmd_table->token[i], 1);
+		if (shell.cmd_table->token[i + 1] != 0)
 			ft_putstr_fd(" ", 1);
-		}
 		i++;
 	}
-	if (j ==0 )
-		printf("\n");
+	if (j == 0 )
+		ft_putstr_fd("\n", 1);
 	return (1);
 }
 
