@@ -160,6 +160,7 @@ void	ft_pidclear(t_pid **pid);
 void	ft_init_termtype(void);
 void	ft_init_termios(void);
 
-
+///Built-in
+int		ft_unset(void);
 
 #endif
