@@ -8,6 +8,10 @@ void	ft_parser(void)
 
 	while (*shell.line && *shell.line != ';')
 	{
+		shell.fd_in = 0;
+		shell.fd_out = 1;
+		shell.fd_in_file = 0;
+		shell.fd_out_file = 0;
 		list = 0;
 		ft_crt_lst(&list);
 		if (!list)
@@ -41,7 +45,7 @@ void	ft_crt_lst(t_list **list)
 			shell.line++;
 		if (*shell.line == '<' || *shell.line == '>')
 			ft_parser_redirect();
-		else
+		else if (*shell.line)
 		{
 			string = ft_crt_string();
 			if (string)

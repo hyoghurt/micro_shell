@@ -93,29 +93,29 @@ char	*ft_getset(char *str)
 	return (0);
 }
 
-void	ft_init_shell_line(void)
+void	ft_init_string(char **s)
 {
 	size_t	len;
 	size_t	rest;
 	size_t	whole;
 	char	*tmp;
 
-	if (shell.line)
+	if (*s)
 	{
-		len = ft_strlen(shell.line);
+		len = ft_strlen(*s);
 		rest = len % BUF_SIZE;
 		whole = len / BUF_SIZE;
 		if (whole >= 1 && rest == 2)
 		{
 			tmp = (char*)malloc((whole + 2) * BUF_SIZE);
-			ft_strlcpy(tmp, shell.line, len + 1);
-			free(shell.line);
-			shell.line = tmp;
+			ft_strlcpy(tmp, *s, len + 1);
+			free(*s);
+			*s = tmp;
 		}
 	}
 	else
-		shell.line = ft_calloc(1, (BUF_SIZE * 2));
-	if (!shell.line)
+		*s = ft_calloc(1, (BUF_SIZE * 2));
+	if (!(*s))
 		ft_exit("minishell: init_shell_line: malloc: ", "error");
 }
 

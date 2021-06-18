@@ -8,12 +8,12 @@ int		ft_executor(void)
 	t_cmd	*cmd;
 	int		flag;
 
-	flag = 0;
 	cmd = shell.cmd_table;
 	ft_save_stdin_stdout();
 	ft_fd_start(cmd);
 	while (cmd)
 	{
+		flag = 0;
 		if (find_redirect_file(cmd))
 			flag = 1;
 		if (cmd->fd_in != 0)
@@ -34,7 +34,6 @@ int		ft_executor(void)
 				break ;
 			}
 		}
-		flag = 0;
 		cmd = cmd->next;
 	}
 	ft_restore_fd();

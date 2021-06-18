@@ -1,16 +1,14 @@
 #include "minishell.h"
 
-static void	ft_init_termios(void);
+void	ft_init_termios(void);
 static void	ft_init_add_story(void);
-static int	ft_set_prompt(void);
+int	ft_set_prompt(void);
 
 void	ft_start(void)
 {
 	shell.line = 0;
-	ft_init_termios();
-	ft_init_shell_line();
+	ft_init_string(&shell.line);
 	ft_init_add_story();
-	ft_set_prompt();
 }
 
 static void	ft_init_add_story(void)
@@ -28,7 +26,7 @@ static void	ft_init_add_story(void)
 	ft_story_add_front(&shell.story, new);
 }
 
-static void	ft_init_termios(void)
+void	ft_init_termios(void)
 {
 	struct termios	termios_temp;
 
@@ -41,7 +39,7 @@ static void	ft_init_termios(void)
 		ft_exit("minishell: init_termios: tcsetattr: ", "error");
 }
 
-static int	ft_set_prompt(void)
+int	ft_set_prompt(void)
 {
 	ft_putstr_fd ("\033[1;48;5;58m", 1);
 	if (shell.user)

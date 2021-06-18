@@ -32,13 +32,13 @@ void	ft_key_down(void)
 	ft_putstr_fd(shell.line, 1);
 }
 
-void	ft_key_backsp(void)
+void	ft_key_backsp(char *s)
 {
 	size_t	i;
 
 	tputs(shell.key.rc, 1, ft_putint);
 	tputs(shell.key.cd, 1, ft_putint);
-	i = ft_strlen(shell.line);
-	shell.line[i - 1] = '\0';
-	ft_putstr_fd(shell.line, 1);
+	i = ft_strlen(s);
+	s[i - 1] = '\0';
+	ft_putstr_fd(s, 1);
 }

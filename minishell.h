@@ -99,6 +99,8 @@ typedef struct		s_shell
 	int				fd_out;
 	char			*fd_in_file;
 	char			*fd_out_file;
+	char			*s;
+	int				f;
 }					t_shell;
 //////////////////////////////////////////////
 t_shell		shell;
@@ -133,14 +135,14 @@ int		ft_exit(char *msg, char *s);
 void	ft_sig_ctrl_c(int sig);
 void	ft_key_up(void);
 void	ft_key_down(void);
-void	ft_key_backsp(void); 
+void	ft_key_backsp(char *s); 
 
 char	**ft_crt_arr_bi_from_list(t_list *list);
 size_t	ft_array_len(char **envp);
 char	**ft_cpy_array_bi(char **s1, char **s2);
 char	*ft_getset(char *str);
 char	*ft_path_token(char **cmd);
-void	ft_init_shell_line(void);
+void	ft_init_string(char **s);
 
 int		ft_lexer(void);
 int		ft_check_lexer(void);
@@ -187,5 +189,9 @@ char	*ft_crt_string(void);
 int		ft_unset(void);
 int		ft_fn_selector(void);
 void	ft_builtin(void);
+
+void	ft_loop(void);
+int	ft_set_prompt(void);
+void	ft_init_termios(void);
 
 #endif

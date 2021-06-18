@@ -6,6 +6,8 @@ void	ft_read(void)
 {
 	char	buf[10];
 
+	ft_init_termios();
+	ft_set_prompt();
 	while (1)
 	{
 		ft_memset(buf, 0, 10);
@@ -22,7 +24,7 @@ void	ft_read(void)
 
 void	ft_read_character(char *buf)
 {
-	ft_init_shell_line();	//realoc if it's necessary for shell.line
+	ft_init_string(&shell.line);
 	if (ft_strncmp(buf, shell.key.up, 3) == 0)
 		ft_key_up();
 	else if (ft_strncmp(buf, shell.key.down, 3) == 0)
@@ -30,7 +32,7 @@ void	ft_read_character(char *buf)
 	else if (buf[0] == '\004' && ft_strlen(shell.line) == 0)
 		ft_exit(0, 0);
 	else if (buf[0] == '\177')
-		ft_key_backsp();
+		ft_key_backsp(shell.line);
 	if ((buf[0] >= 32 && buf[0] <= 126) || (buf[0] >= 9 && buf[0] <= 13))
 	{
 		write (1, buf, 1);
