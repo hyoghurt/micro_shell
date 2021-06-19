@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		ft_print_error(void)
+int	ft_print_error(void)
 {
 	ft_putstr_fd(strerror(errno), 2);
 	ft_putstr_fd("\n", 2);
@@ -23,8 +23,6 @@ void	ft_free_bi(char **s)
 
 void	ft_free_shell(void)
 {
-	//if (shell.line)
-	//	free(shell.line);
 	if (shell.cmd_table)
 		ft_cmdclear(&shell.cmd_table);
 	if (shell.set)
@@ -33,10 +31,9 @@ void	ft_free_shell(void)
 		free(shell.pathtkn);
 	if (shell.story)
 		ft_story_clear(&shell.story);
-
 }
 
-int		ft_exit(char *msg, char *s)
+int	ft_exit(char *msg, char *s)
 {
 	int	ret;
 

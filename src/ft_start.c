@@ -1,8 +1,7 @@
 #include "minishell.h"
 
 void	ft_init_termios(void);
-static void	ft_init_add_story(void);
-int	ft_set_prompt(void);
+void	ft_init_add_story(void);
 
 void	ft_start(void)
 {
@@ -11,7 +10,7 @@ void	ft_start(void)
 	ft_init_add_story();
 }
 
-static void	ft_init_add_story(void)
+void	ft_init_add_story(void)
 {
 	t_story	*new;
 
@@ -32,7 +31,7 @@ void	ft_init_termios(void)
 
 	if (tcgetattr(0, &termios_temp) != 0)
 		ft_exit("minishell: init_termios: tcgetattr: ", "error");
-	termios_temp.c_lflag &= ~(ECHO|ICANON);
+	termios_temp.c_lflag &= ~(ECHO | ICANON);
 	termios_temp.c_cc[VMIN] = 1;
 	termios_temp.c_cc[VTIME] = 0;
 	if (tcsetattr(0, TCSANOW, &termios_temp) != 0)
@@ -47,6 +46,6 @@ int	ft_set_prompt(void)
 	else
 		ft_putstr_fd ("USER", 1);
 	ft_putstr_fd (" > \033[0m", 1);
-	tputs(shell.key.sc, 1, ft_putint);	//save cursor position (need for backspace and move story)
+	tputs(shell.key.sc, 1, ft_putint);
 	return (0);
 }

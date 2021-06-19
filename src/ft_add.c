@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		ft_putint(int c)
+int	ft_putint(int c)
 {
 	write(1, &c, 1);
 	return (1);
@@ -8,67 +8,19 @@ int		ft_putint(int c)
 
 void	ft_print_string(char *s1, char *s2, char *s3)
 {
-	ft_putstr_fd(s1, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(s2, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(s3, 2);
+	if (s1)
+	{
+		ft_putstr_fd(s1, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	if (s2)
+	{
+		ft_putstr_fd(s2, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	if (s3)
+		ft_putstr_fd(s3, 2);
 	ft_putstr_fd("\n", 2);
-}
-
-size_t	ft_array_len(char **str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-char	**ft_cpy_array_bi(char **s1, char **s2)
-{
-	size_t	i;
-
-	i = 0;
-	while (s2[i])
-	{
-		s1[i] = ft_strdup(s2[i]);
-		if (!s1[i])
-		{
-			ft_free_bi(s1);
-			return (0);
-		}
-		i++;
-	}
-	s1[i] = 0;
-	return (s1);
-}
-
-char	**ft_crt_arr_bi_from_list(t_list *list)
-{
-	size_t	size;
-	char	**tokens;
-	size_t	i;
-
-	size = ft_lstsize(list);
-	tokens = (char**)malloc(sizeof(char*) * (size + 1));
-	if (!tokens)
-		return (0);
-	i = 0;
-	while (i < size)
-	{
-		tokens[i] = ft_strdup(list->content);
-		if (!tokens[i])
-		{
-			ft_free_bi(tokens);
-			return (0);
-		}
-		list = list->next;
-		i++;
-	}
-	tokens[i] = 0;
-	return (tokens);
 }
 
 char	*ft_getset(char *str)
@@ -93,6 +45,23 @@ char	*ft_getset(char *str)
 	return (0);
 }
 
+char	*ft_value_getset(void)
+{
+	char	*start;
+	char	*tmp;
+	char	*content;
+
+	start = shell.line;
+	while (ft_isalnum(*shell.line) || *shell.line == '_')
+		shell.line++;
+	tmp = ft_substr(start, 0, shell.line - start);
+	if (!tmp)
+		return (0);
+	content = ft_getset(tmp);
+	free(tmp);
+	return (content);
+}
+
 void	ft_init_string(char **s)
 {
 	size_t	len;
@@ -107,7 +76,7 @@ void	ft_init_string(char **s)
 		whole = len / BUF_SIZE;
 		if (whole >= 1 && rest == 2)
 		{
-			tmp = (char*)malloc((whole + 2) * BUF_SIZE);
+			tmp = (char *)malloc((whole + 2) * BUF_SIZE);
 			ft_strlcpy(tmp, *s, len + 1);
 			free(*s);
 			*s = tmp;
@@ -118,4 +87,3 @@ void	ft_init_string(char **s)
 	if (!(*s))
 		ft_exit("minishell: init_shell_line: malloc: ", "error");
 }
-

@@ -10,7 +10,6 @@ void	debag_check_story(void)
 	t_story	*tmp;
 
 	tmp = shell.story;
-
 	while (tmp)
 	{
 		printf("story=%s\n", tmp->str);

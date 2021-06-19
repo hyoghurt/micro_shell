@@ -1,22 +1,21 @@
 #include "minishell.h"
 
-
-int		ft_echo(void)
+int		ft_echo(char **cmd)
 {
 	int		i;
 	int		j;
 
 	i = 1;
 	j = 0;
-	if (!ft_strncmp(shell.cmd_table->token[1], "-n", 3))
+	while (cmd[i] != 0)
 	{
-		i = 2;
-		j = 1;
-	}
-	while (shell.cmd_table->token[i] != 0)
-	{
-		ft_putstr_fd(shell.cmd_table->token[i], 1);
-		if (shell.cmd_table->token[i + 1] != 0)
+		if (i == 1)
+		{
+			if (!ft_strncmp(cmd[i], "-n", 3))
+				j == 1;
+		}
+		ft_putstr_fd(cmd[i], 1);
+		if (cmd[i + 1] != 0)
 			ft_putstr_fd(" ", 1);
 		i++;
 	}
@@ -25,19 +24,19 @@ int		ft_echo(void)
 	return (1);
 }
 
-int		ft_cd(void)
+int		ft_cd(char **cmd)
 {
 	char *path;
 	int	ret;
 
-	path = shell.cmd_table->token[1];
+	path = cmd[1];
 	ret = chdir(path);
 	if (ret == -1)
 		ft_print_string("minishell", path, strerror(errno));
 	return (1);
 }
 
-int		ft_env(void)
+int		ft_env(char **cmd)
 {
 	char **env;
 	int	i;
@@ -51,7 +50,7 @@ int		ft_env(void)
 	return (1);
 }
 
-int		ft_export()
+int		ft_export(char **cmd)
 {
 	int	n;
 	int i;
@@ -61,18 +60,18 @@ int		ft_export()
 	i = 0;
 	j = 0;
 	n = ft_array_len(shell.set);
-	//while (shell.cmd_table->token[j++]);
+	//while (cmd[j++]);
 	env_var = malloc(n+2);
 	while(shell.set[i])
 	{
 		env_var[i] = shell.set[i];
 		i++;
 	}
-	// while (shell.cmd_table->token[j++])
+	// while (cmd[j++])
 	// {
-	// 	env_var[i++] = ft_strdup(shell.cmd_table->token[j++]);
+	// 	env_var[i++] = ft_strdup(cmd[j++]);
 	// }
-	env_var[i++] = ft_strdup(shell.cmd_table->token[1]);
+	env_var[i++] = ft_strdup(cmd[1]);
 	env_var[i] = 0;
 	free(shell.set);
 	shell.set = env_var;
@@ -80,7 +79,7 @@ int		ft_export()
 	return (1);
 }
 
-int		ft_pwd(void)
+int		ft_pwd(char **cmd)
 {
 	char *pwd;
 
@@ -92,22 +91,21 @@ int		ft_pwd(void)
 	return (1);
 }
 
-int		ft_fn_selector(void)
+int		ft_fn_selector(char **cmd)
 {
-
-	if (!ft_strncmp(shell.cmd_table->token[0], "echo", 5))
-		return (ft_echo());
-	if (!ft_strncmp(shell.cmd_table->token[0], "cd", 3))
-		return (ft_cd());
-	if (!ft_strncmp(shell.cmd_table->token[0], "pwd", 4))
-		return (ft_pwd());
-	if (!ft_strncmp(shell.cmd_table->token[0], "exit", 5))
+	if (!ft_strncmp(cmd[0], "echo", 5))
+		return (ft_echo(cmd));
+	if (!ft_strncmp(cmd[0], "cd", 3))
+		return (ft_cd(cmd));
+	else if (!ft_strncmp(cmd[0], "pwd", 4))
+		return (ft_pwd(cmd));
+	else if (!ft_strncmp(cmd[0], "exit", 5))
 		return (ft_exit(0,0));
-	if (!ft_strncmp(shell.cmd_table->token[0], "env", 4))
-		return (ft_env());
-	if (!ft_strncmp(shell.cmd_table->token[0], "export", 7))
-		return (ft_export());
-	if (!ft_strncmp(shell.cmd_table->token[0], "unset", 6))
-		return (ft_unset());
+	else if (!ft_strncmp(cmd[0], "env", 4))
+		return (ft_env(cmd));
+	else if (!ft_strncmp(cmd[0], "export", 7))
+		return (ft_export(cmd));
+	else if (!ft_strncmp(cmd[0], "unset", 6))
+		return (ft_unset(cmd));
 	return (0);
 }

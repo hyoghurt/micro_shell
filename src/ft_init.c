@@ -10,7 +10,6 @@ void	ft_init(char **envp)
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_sig_ctrl_c);
-
 	ft_init_struct();
 	ft_init_termtype();
 	if (tcgetattr(0, &shell.termios_p) != 0)
@@ -55,7 +54,7 @@ void	ft_init_set(char **envp)
 	size = 0;
 	if (envp)
 		size = ft_array_len(envp);
-	set = (char**)malloc((size + 1) * sizeof(char*));
+	set = (char **)malloc((size + 1) * sizeof(char *));
 	if (!set)
 		ft_exit("minishell: init_set: malloc: ", "error");
 	shell.set = ft_cpy_array_bi(set, envp);
@@ -67,10 +66,10 @@ void	ft_init_key(void)
 {
 	shell.key.down = "\033[B";
 	shell.key.up = tgetstr("up", 0);
-	shell.key.rc = tgetstr("rc", 0);		//restore "sc" position
-	shell.key.sc = tgetstr("sc", 0);		//save cursor position
-	shell.key.cd = tgetstr("cd", 0);		//clear before cursor
-	if (!shell.key.down || !shell.key.up || !shell.key.rc 
-			|| !shell.key.sc || !shell.key.cd)
+	shell.key.rc = tgetstr("rc", 0);
+	shell.key.sc = tgetstr("sc", 0);
+	shell.key.cd = tgetstr("cd", 0);
+	if (!shell.key.up || !shell.key.rc
+		|| !shell.key.sc || !shell.key.cd)
 		ft_exit ("minishell: init_key: ", "error");
 }

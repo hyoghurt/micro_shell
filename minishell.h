@@ -108,10 +108,9 @@ t_shell		shell;
 t_story		*ft_story_new(char *str);
 void		ft_story_add_back(t_story **story, t_story *new);
 void		ft_story_add_front(t_story **story, t_story *new);
-void		ft_story_clear(t_story **story);
 void		ft_story_del_front(t_story **story);
-
-
+void		ft_story_clear(t_story **story);
+//////////////////////////////////////////////
 t_cmd		*ft_cmdnew(char **token);
 void		ft_cmdadd_back(t_cmd **cmd, t_cmd *new);
 void		ft_cmdclear(t_cmd **cmd);
@@ -186,12 +185,13 @@ void	ft_crt_lst(t_list **list);
 char	*ft_crt_string(void);
 
 ///Built-in
-int		ft_unset(void);
-int		ft_fn_selector(void);
-void	ft_builtin(void);
+int		ft_unset(char **cmd);
+int		ft_fn_selector(char **cmd);
 
 void	ft_loop(void);
-int	ft_set_prompt(void);
+int		ft_set_prompt(void);
 void	ft_init_termios(void);
+void	ft_redir_read(char *string);
+
 
 #endif

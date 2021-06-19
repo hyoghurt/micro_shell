@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-t_list	*ft_crt_path_list(char *path, char **cmd);
-char	*ft_str_path(char **path, char **cmd);
-char	*ft_pathname(t_list **list);
+static t_list	*ft_crt_path_list(char *path, char **cmd);
+static char		*ft_str_path(char **path, char **cmd);
+static char		*ft_pathname(t_list **list);
 
 char	*ft_path_token(char **cmd)
 {
@@ -14,22 +14,20 @@ char	*ft_path_token(char **cmd)
 	{
 		path = ft_strdup(cmd[0]);
 		if (!path)
-			printf("dopisat exit\n");
+			ft_exit("minishell: path_token: malloc: ", "error");
 		return (path);
 	}
 	path = ft_getset("PATH");
 	if (!path)
-		printf("dopisat exit\n");
-
+		return (path);
 	path_list = ft_crt_path_list(path, cmd);
 	free(path);
 	if (!path_list)
-		printf("dopisat exit\n");
-
+		ft_exit("minishell: path_list: malloc: ", "error");
 	return (ft_pathname(&path_list));
 }
 
-t_list	*ft_crt_path_list(char *path, char **cmd)
+static t_list	*ft_crt_path_list(char *path, char **cmd)
 {
 	t_list	*result;
 	t_list	*new;
@@ -41,44 +39,38 @@ t_list	*ft_crt_path_list(char *path, char **cmd)
 		path = ft_strchr(path, '/');
 		if (!path)
 			break ;
-
 		str = ft_str_path(&path, cmd);
-		if (!str)
-			printf("dopisat exit\n");
-
 		new = ft_lstnew(str);
 		if (!new)
-			printf("dopisat exit\n");
-
+			ft_exit("minishell: path_list: malloc: ", "error");
 		ft_lstadd_back(&result, new);
 	}
 	return (result);
 }
 
-char	*ft_str_path(char **path, char **cmd)
+static char	*ft_str_path(char **path, char **cmd)
 {
 	size_t	i;
+	size_t	len;
 	char	*result;
 	char	*str;
-	size_t	len;
 
 	len = ft_strlen(cmd[0]);
 	str = *path;
 	i = 0;
-	while (str[i] != ':' && str[i])
+	while (str[i] && str[i] != ':')
 		i++;
 	*path = &str[i];
-	result = (char*)malloc(i + len + 2);
+	result = ft_calloc((i + len + 2), 1);
 	if (!result)
-		return (0);
-	ft_memcpy(result, str, i);
-	result[i] = '/';
-	ft_memcpy((result + i + 1), cmd[0], len);
-	result[i + len + 1] = 0;
+		ft_exit("minishell: path_str: malloc: ", "error");
+	ft_strlcat(result, str, i + 1);
+	ft_strlcat(result, "/", i + 2);
+	ft_strlcat(result, cmd[0], len + i + 2);
 	return (result);
 }
 
-char	*ft_pathname(t_list **list)
+static char	*ft_pathname(t_list **list)
 {
 	struct stat	buf;
 	t_list		*path_list;
@@ -87,9 +79,11 @@ char	*ft_pathname(t_list **list)
 	path_list = *list;
 	while (path_list)
 	{
-		if (stat((char*)path_list->content, &buf) == 0)
+		if (stat((char *)path_list->content, &buf) == 0)
 		{
-			pathname = ft_strdup((char*)path_list->content);
+			pathname = ft_strdup((char *)path_list->content);
+			if (!pathname)
+				ft_exit("minishell: pathname: malloc: ", "error");
 			ft_lstclear(list, free);
 			return (pathname);
 		}

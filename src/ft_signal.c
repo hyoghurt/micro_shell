@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void		ft_sig_ctrl_c(int sig)
+void	ft_sig_ctrl_c(int sig)
 {
 	if (!shell.pid)
 	{

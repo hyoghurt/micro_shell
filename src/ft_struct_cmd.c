@@ -6,7 +6,7 @@ t_cmd	*ft_cmdnew(char	**token)
 
 	if (!token)
 		return (0);
-	new = (t_cmd*)malloc(sizeof(t_cmd));
+	new = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!new)
 		return (0);
 	new->token = token;
@@ -17,7 +17,7 @@ t_cmd	*ft_cmdnew(char	**token)
 	new->fd_out_file = shell.fd_out_file;
 	return (new);
 }
-		
+
 void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new)
 {
 	t_cmd	*tmp;
@@ -27,7 +27,7 @@ void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new)
 		*cmd = new;
 	else
 	{
-		while(tmp->next)
+		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
 	}

@@ -3,7 +3,35 @@
 int	ft_create_child_process(char **cmd);
 int	ft_execve(char **cmd);
 
-int		ft_executor(void)
+int	ft_run_cmd(t_cmd *cmd)
+{
+	int	flag;
+
+	flag = 0;
+	if (find_redirect_file(cmd))
+		flag = 1;
+	if (cmd->fd_in != 0)
+		ft_redirect(cmd->fd_in, shell.std.fd_in);
+	ft_redirect(shell.std.fd_in, 0);
+	if (!cmd->next)
+		ft_fd_end(cmd);
+	else
+		ft_fd_pipe();
+	if (cmd->fd_out != 1)
+		ft_redirect(cmd->fd_out, shell.std.fd_out);
+	ft_redirect(shell.std.fd_out, 1);
+	if (!flag)
+	{
+		if (ft_create_child_process(cmd->token))
+		{
+			ft_killpid();
+			return (1);
+		}
+	}
+	return (0);
+}
+
+int	ft_executor(void)
 {
 	t_cmd	*cmd;
 	int		flag;
@@ -13,27 +41,8 @@ int		ft_executor(void)
 	ft_fd_start(cmd);
 	while (cmd)
 	{
-		flag = 0;
-		if (find_redirect_file(cmd))
-			flag = 1;
-		if (cmd->fd_in != 0)
-			ft_redirect(cmd->fd_in, shell.std.fd_in);
-		ft_redirect(shell.std.fd_in, 0);
-		if (!cmd->next)
-			ft_fd_end(cmd);
-		else								
-			ft_fd_pipe();
-		if (cmd->fd_out != 1)
-			ft_redirect(cmd->fd_out, shell.std.fd_out);
-		ft_redirect(shell.std.fd_out, 1);
-		if (!flag)
-		{
-			if (ft_create_child_process(cmd->token))
-			{
-				ft_killpid();
-				break ;
-			}
-		}
+		if (ft_run_cmd(cmd))
+			break ;
 		cmd = cmd->next;
 	}
 	ft_restore_fd();
@@ -41,11 +50,11 @@ int		ft_executor(void)
 	return (0);
 }
 
-int		ft_create_child_process(char **cmd)
+int	ft_create_child_process(char **cmd)
 {
-	if (!ft_fn_selector())
+	if (!ft_fn_selector(cmd))
 	{
-		shell.pathtkn = ft_path_token(cmd);			//valitza posle shell.pathtkn
+		shell.pathtkn = ft_path_token(cmd);
 		if (!shell.pathtkn)
 		{
 			ft_print_string("minishell", "command not found", cmd[0]);
@@ -83,22 +92,5 @@ int	ft_execve(char **cmd)
 	}
 	new = ft_pidnew(pid);
 	ft_addpid_back(&shell.pid, new);
-	/*
-	int	status;
-	status = 0;
-	waitpid(pid, &status, WUNTRACED | WCONTINUED);
-	if (WIFEXITED(status))
-	{
-		t_pid	*my_p;
-		my_p = shell.pid;
-		while (my_p)
-		{
-			//printf("my_pid=%d\n", my_p->pid);
-			kill(my_p->pid, SIGINT);
-			my_p = my_p->next;
-		}
-		return (1);
-	}
-	*/
 	return (0);
 }

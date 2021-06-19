@@ -3,10 +3,9 @@
 void	ft_finish_executor(void);
 int		ft_check_line(void);
 
-int		main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	ft_init(envp);
-
 	while (1)
 	{
 		ft_start();
@@ -21,7 +20,9 @@ int		main(int argc, char **argv, char **envp)
 				ft_parser();
 				if (shell.cmd_table)
 					ft_executor();
-				if (*shell.line == ';')
+
+				while (*shell.line == ';'
+					|| *shell.line == ' ' || *shell.line == '\t')
 					shell.line++;
 				ft_finish_executor();
 			}
@@ -29,7 +30,7 @@ int		main(int argc, char **argv, char **envp)
 	}
 }
 
-int		ft_check_line(void)
+int	ft_check_line(void)
 {
 	char	*s;
 	size_t	i;

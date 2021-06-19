@@ -1,5 +1,13 @@
 #include "minishell.h"
 
+void	ft_init_fd(void)
+{
+	shell.fd_in = 0;
+	shell.fd_out = 1;
+	shell.fd_in_file = 0;
+	shell.fd_out_file = 0;
+}
+
 void	ft_parser(void)
 {
 	t_cmd	*new;
@@ -8,30 +16,25 @@ void	ft_parser(void)
 
 	while (*shell.line && *shell.line != ';')
 	{
-		shell.fd_in = 0;
-		shell.fd_out = 1;
-		shell.fd_in_file = 0;
-		shell.fd_out_file = 0;
 		list = 0;
+		ft_init_fd();
 		ft_crt_lst(&list);
 		if (!list)
-			ft_exit("minishell: malloc", "error");
+			ft_exit("minishell: parser: malloc", "error");
 		token = ft_crt_arr_bi_from_list(list);
 		ft_lstclear(&list, free);
 		if (!token)
-			ft_exit("minishell: malloc", "error");
+			ft_exit("minishell: parser: malloc", "error");
 		new = ft_cmdnew(token);
 		if (!new)
 		{
 			ft_free_bi(token);
-			ft_exit("minishell: malloc", "error");
+			ft_exit("minishell: parser: malloc", "error");
 		}
 		ft_cmdadd_back(&shell.cmd_table, new);
 		while (*shell.line == '|' || *shell.line == ' ' || *shell.line == '\t')
 			shell.line++;
 	}
-	//debag_check_token();
-	//exit(0);
 }
 
 void	ft_crt_lst(t_list **list)

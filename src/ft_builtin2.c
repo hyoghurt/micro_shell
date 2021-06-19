@@ -42,7 +42,7 @@ void    ft_clear_str(int j)
     //free(shell.set[i+1]);
 }
 
-int		ft_unset(void)
+int		ft_unset(char **cmd)
 {
     int i;
     int j;
