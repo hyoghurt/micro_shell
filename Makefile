@@ -6,6 +6,7 @@ SRC				=	main.c	\
 					ft_start.c \
 					ft_read.c \
 					ft_read_redirect.c \
+					ft_read_redirect_2.c \
 					ft_parser.c \
 					ft_parser_add.c \
 					ft_parser_redirect.c \
@@ -23,7 +24,6 @@ SRC				=	main.c	\
 					ft_fd_2.c \
 					ft_executor.c \
 					ft_exec_add.c \
-					ft_exec_redirect.c \
 					ft_struct_cmd.c \
 					ft_struct_story.c \
 					ft_struct_pid.c \

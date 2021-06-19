@@ -2,14 +2,14 @@
 
 void	debag_check_shell_line(void)
 {
-	printf("\n\e[1;38;5;10mshell.line=\t[%s]\e[0m\n", shell.line);
+	printf("\n\e[1;38;5;10mg_shell.line=\t[%s]\e[0m\n", g_shell.line);
 }
 
 void	debag_check_story(void)
 {
 	t_story	*tmp;
 
-	tmp = shell.story;
+	tmp = g_shell.story;
 	while (tmp)
 	{
 		printf("story=%s\n", tmp->str);
@@ -23,7 +23,7 @@ void	debag_check_token(void)
 	t_cmd	*tmp;
 	int		i;
 
-	tmp = shell.cmd_table;
+	tmp = g_shell.cmd_table;
 	while (tmp)
 	{
 		s = tmp->token;
@@ -45,7 +45,7 @@ void	debag_check_token(void)
 
 void	debag_check_status(void)
 {
-	printf("\e[1;38;5;10m\np shell.cmd_table=%p\e[0m\n", shell.cmd_table);
-	printf("\e[1;38;5;10mstatus=[%d]\e[0m\n", shell.status);
+	printf("\e[1;38;5;10m\np g_shell.cmd_table=%p\e[0m\n", g_shell.cmd_table);
+	printf("\e[1;38;5;10mstatus=[%d]\e[0m\n", g_shell.status);
 	printf("\e[1;38;5;10mexit_executor\e[0m\n");
 }

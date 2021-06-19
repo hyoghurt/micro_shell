@@ -2,8 +2,8 @@
 
 int	ft_fd_start(t_cmd *cmd)
 {
-	shell.std.fd_in = dup(shell.std.tmp_in);
-	if (shell.std.fd_in < 0)
+	g_shell.std.fd_in = dup(g_shell.std.tmp_in);
+	if (g_shell.std.fd_in < 0)
 	{
 		ft_restore_fd();
 		ft_exit("minishell: fd_start: dup: ", "error");
@@ -13,8 +13,8 @@ int	ft_fd_start(t_cmd *cmd)
 
 int	ft_fd_end(t_cmd *cmd)
 {
-	shell.std.fd_out = dup(shell.std.tmp_out);
-	if (shell.std.fd_out < 0)
+	g_shell.std.fd_out = dup(g_shell.std.tmp_out);
+	if (g_shell.std.fd_out < 0)
 	{
 		ft_restore_fd();
 		if (cmd->fd_out > 1)
@@ -36,6 +36,6 @@ void	ft_fd_pipe(void)
 	int	fd_pipe[2];
 
 	pipe(fd_pipe);
-	shell.std.fd_out = fd_pipe[1];
-	shell.std.fd_in = fd_pipe[0];
+	g_shell.std.fd_out = fd_pipe[1];
+	g_shell.std.fd_in = fd_pipe[0];
 }

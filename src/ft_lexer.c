@@ -19,7 +19,7 @@ static int	ft_check_pipe_error(void)
 	char	*s;
 	char	*tmp;
 
-	s = shell.line;
+	s = g_shell.line;
 	while (ft_strchr(" \t", *s))
 		s++;
 	if (*s == '|' || *s == ';')
@@ -27,7 +27,7 @@ static int	ft_check_pipe_error(void)
 	tmp = ft_strrchr(s, '|');
 	if (tmp)
 	{
-		if (shell.line != tmp && *(tmp - 1) == '\\')
+		if (g_shell.line != tmp && *(tmp - 1) == '\\')
 			return (0);
 		tmp++;
 		while (*tmp && ft_strchr(" \t", *tmp))
@@ -43,7 +43,7 @@ static int	ft_check_multiline(void)
 	char	*s;
 	size_t	len;
 
-	s = shell.line;
+	s = g_shell.line;
 	len = ft_strlen(s);
 	if (len)
 	{

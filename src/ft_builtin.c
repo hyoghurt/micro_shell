@@ -42,7 +42,7 @@ int		ft_env(char **cmd)
 	int	i;
 	
 	i = 0;
-	env = shell.set;
+	env = g_shell.set;
 	while (env[i])
 	{
 		printf("%s\n", env[i++]);
@@ -59,12 +59,12 @@ int		ft_export(char **cmd)
 
 	i = 0;
 	j = 0;
-	n = ft_array_len(shell.set);
+	n = ft_array_len(g_shell.set);
 	//while (cmd[j++]);
 	env_var = malloc(n+2);
-	while(shell.set[i])
+	while(g_shell.set[i])
 	{
-		env_var[i] = shell.set[i];
+		env_var[i] = g_shell.set[i];
 		i++;
 	}
 	// while (cmd[j++])
@@ -73,8 +73,8 @@ int		ft_export(char **cmd)
 	// }
 	env_var[i++] = ft_strdup(cmd[1]);
 	env_var[i] = 0;
-	free(shell.set);
-	shell.set = env_var;
+	free(g_shell.set);
+	g_shell.set = env_var;
 	printf("%s\n", "Wanna export?");
 	return (1);
 }
@@ -95,7 +95,7 @@ int		ft_fn_selector(char **cmd)
 {
 	if (!ft_strncmp(cmd[0], "echo", 5))
 		return (ft_echo(cmd));
-	if (!ft_strncmp(cmd[0], "cd", 3))
+	else if (!ft_strncmp(cmd[0], "cd", 3))
 		return (ft_cd(cmd));
 	else if (!ft_strncmp(cmd[0], "pwd", 4))
 		return (ft_pwd(cmd));

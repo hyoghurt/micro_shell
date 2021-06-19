@@ -32,7 +32,7 @@ char	*ft_getset(char *str)
 	i = -1;
 	if (!str)
 		return (0);
-	tmp = shell.set;
+	tmp = g_shell.set;
 	len = ft_strlen(str);
 	while (tmp[++i])
 	{
@@ -51,10 +51,10 @@ char	*ft_value_getset(void)
 	char	*tmp;
 	char	*content;
 
-	start = shell.line;
-	while (ft_isalnum(*shell.line) || *shell.line == '_')
-		shell.line++;
-	tmp = ft_substr(start, 0, shell.line - start);
+	start = g_shell.line;
+	while (ft_isalnum(*g_shell.line) || *g_shell.line == '_')
+		g_shell.line++;
+	tmp = ft_substr(start, 0, g_shell.line - start);
 	if (!tmp)
 		return (0);
 	content = ft_getset(tmp);

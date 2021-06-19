@@ -18,7 +18,7 @@ void	ft_content(char **string, char *start)
 {
 	char	*content;
 
-	content = ft_substr(start, 0, shell.line - start);
+	content = ft_substr(start, 0, g_shell.line - start);
 	if (!content)
 		ft_exit("minishell: content: malloc: ", "error");
 	ft_strjoin_string(string, content);

@@ -23,14 +23,14 @@ void	ft_free_bi(char **s)
 
 void	ft_free_shell(void)
 {
-	if (shell.cmd_table)
-		ft_cmdclear(&shell.cmd_table);
-	if (shell.set)
-		ft_free_bi(shell.set);
-	if (shell.pathtkn)
-		free(shell.pathtkn);
-	if (shell.story)
-		ft_story_clear(&shell.story);
+	if (g_shell.cmd_table)
+		ft_cmdclear(&g_shell.cmd_table);
+	if (g_shell.set)
+		ft_free_bi(g_shell.set);
+	if (g_shell.pathtkn)
+		free(g_shell.pathtkn);
+	if (g_shell.story)
+		ft_story_clear(&g_shell.story);
 }
 
 int	ft_exit(char *msg, char *s)
@@ -47,7 +47,7 @@ int	ft_exit(char *msg, char *s)
 		if (ft_strncmp(s, "err_tcgetattr", 13))
 			exit (1);
 	}
-	if (tcsetattr(0, TCSANOW, &shell.termios_p) != 0)
+	if (tcsetattr(0, TCSANOW, &g_shell.termios_p) != 0)
 		ret = ft_print_error();
 	ft_putstr_fd("exit\n", 1);
 	exit (ret);

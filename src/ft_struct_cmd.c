@@ -4,17 +4,15 @@ t_cmd	*ft_cmdnew(char	**token)
 {
 	t_cmd	*new;
 
-	if (!token)
-		return (0);
 	new = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!new)
 		return (0);
 	new->token = token;
 	new->next = 0;
-	new->fd_in = shell.fd_in;
-	new->fd_out = shell.fd_out;
-	new->fd_in_file = shell.fd_in_file;
-	new->fd_out_file = shell.fd_out_file;
+	new->fd_in = g_shell.fd_in;
+	new->fd_out = g_shell.fd_out;
+	new->fd_in_file = g_shell.fd_in_file;
+	new->fd_out_file = g_shell.fd_out_file;
 	return (new);
 }
 

@@ -28,18 +28,18 @@ void    ft_clear_str(int j)
 
     i = j;
     printf("====================");
-    printf("This is ur Val %s", shell.set[j]);
+    printf("This is ur Val %s", g_shell.set[j]);
     printf("====================");
-    free(shell.set[j]);
+    free(g_shell.set[j]);
     j++;
-    while (shell.set[j])
+    while (g_shell.set[j])
     {
-        shell.set[i] = shell.set[j];
+        g_shell.set[i] = g_shell.set[j];
         i++;
         j++;
     }
-    shell.set[i] = 0;
-    //free(shell.set[i+1]);
+    g_shell.set[i] = 0;
+    //free(g_shell.set[i+1]);
 }
 
 int		ft_unset(char **cmd)
@@ -49,17 +49,17 @@ int		ft_unset(char **cmd)
     size_t len;
 
     i = 0;
-    while (shell.cmd_table->token[++i])
+    while (g_shell.cmd_table->token[++i])
     {
-        if (ft_input_is_valid(shell.cmd_table->token[i]))
+        if (ft_input_is_valid(g_shell.cmd_table->token[i]))
         {
             j = 0;
-            while (shell.set[j])
+            while (g_shell.set[j])
             {
-                len = ft_strlen(shell.cmd_table->token[i]);
-                if (!ft_strncmp(shell.set[j], shell.cmd_table->token[i], len))
+                len = ft_strlen(g_shell.cmd_table->token[i]);
+                if (!ft_strncmp(g_shell.set[j], g_shell.cmd_table->token[i], len))
                 {
-                    if (shell.set[j][len] == '=')
+                    if (g_shell.set[j][len] == '=')
                         ft_clear_str(j);
                 }
                 j++;

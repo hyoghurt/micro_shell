@@ -35,6 +35,8 @@ char	**ft_crt_arr_bi_from_list(t_list *list)
 	char	**tokens;
 	size_t	i;
 
+	if (!list)
+		return (0);
 	size = ft_lstsize(list);
 	tokens = (char **)malloc(sizeof(char *) * (size + 1));
 	if (!tokens)
@@ -43,13 +45,12 @@ char	**ft_crt_arr_bi_from_list(t_list *list)
 	while (i < size)
 	{
 		tokens[i] = ft_strdup(list->content);
-		if (!tokens[i])
+		if (!tokens[i++])
 		{
 			ft_free_bi(tokens);
 			return (0);
 		}
 		list = list->next;
-		i++;
 	}
 	tokens[i] = 0;
 	return (tokens);

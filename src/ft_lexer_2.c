@@ -9,7 +9,7 @@ int	ft_check_lexer(void)
 {
 	char	*s;
 
-	s = shell.line;
+	s = g_shell.line;
 	while (*s)
 	{
 		if (*s == '\\')
@@ -56,7 +56,7 @@ static int	ft_lexer_quote_2(char **s)
 	while (*tmp && *tmp != '\"')
 	{
 		tmp++;
-		if (*tmp && *tmp == '\"' && tmp != shell.line && *(tmp - 1) == '\\')
+		if (*tmp && *tmp == '\"' && tmp != g_shell.line && *(tmp - 1) == '\\')
 			tmp++;
 	}
 	while (*tmp && (*tmp == ' ' || *tmp == '\t'))
