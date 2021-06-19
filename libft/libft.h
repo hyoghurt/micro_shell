@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyoghurt <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pgurn <pgurn@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/10 14:13:24 by hyoghurt          #+#    #+#             */
-/*   Updated: 2021/06/08 07:06:36 by hyoghurt         ###   ########.fr       */
+/*   Updated: 2021/06/20 00:52:20 by pgurn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
-
+/// Added Fn
+void				ft_putnstr(char *str, int n);
 #endif

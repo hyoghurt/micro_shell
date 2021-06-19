@@ -17,6 +17,9 @@
 # include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+# define IS_QUOTE(x) (x == '"' || x == '\'')
+
 //////////////////////////////////////////////
 typedef struct s_story
 {
@@ -160,5 +163,7 @@ void		debag_check_story(void);
 int			ft_fn_selector(char **cmd);
 int			ft_exit(char *msg, char *s);
 int			ft_unset(char **cmd);
+
+
 
 #endif

@@ -1,26 +1,48 @@
 #include "minishell.h"
 
+static void		echo_out(char **str, int pos)
+{
+	int		starts_with;
+	int		ends_with;
+	int		str_len;
+
+	starts_with = IS_QUOTE(str[pos][0]);
+	str_len = (int)ft_strlen(str[pos]);
+	ends_with = IS_QUOTE(str[pos][str_len - 1]);
+	if (ends_with && starts_with)
+		ft_putnstr(str[pos] + 1, -1);
+	else if (ends_with)
+		ft_putnstr(str[pos], -1);
+	else if (starts_with)
+		ft_putstr_fd(str[pos + 1], 1);
+	else
+		ft_putstr_fd(str[pos],1);
+	if (str[pos + 1])
+		ft_putchar_fd(' ',1);
+}
+
 int		ft_echo(char **cmd)
 {
 	int		i;
-	int		j;
+	int		n_flag;
 
-	i = 1;
-	j = 0;
-	while (cmd[i] != 0)
+	n_flag = 0;
+	if (!cmd[1])
 	{
-		if (i == 1)
-		{
-			if (!ft_strncmp(cmd[i], "-n", 3))
-				j == 1;
-		}
-		ft_putstr_fd(cmd[i], 1);
-		if (cmd[i + 1] != 0)
-			ft_putstr_fd(" ", 1);
-		i++;
+		write(1, "\n", 1);
+		return (1);
 	}
-	if (j == 0 )
-		ft_putstr_fd("\n", 1);
+	else if (cmd[1][0] == '-' && cmd[1][1] == 'n' && cmd[1][2] == '\0')
+		n_flag = 1;
+	i = 0;
+	if (n_flag)
+		++i;
+	while (cmd[++i])
+	{
+		echo_out(cmd, i);
+		if (!cmd[i + 1] && !n_flag)
+			ft_putchar_fd('\n',1);
+	}
 	return (1);
 }
 
@@ -82,8 +104,6 @@ int		ft_export(char **cmd)
 int		ft_pwd(char **cmd)
 {
 	char *pwd;
-
-	printf("We are in pwd!\n");
 
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
