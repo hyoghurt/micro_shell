@@ -163,6 +163,7 @@ void		debag_check_story(void);
 int			ft_fn_selector(char **cmd);
 int			ft_exit(char *msg, char *s);
 int			ft_unset(char **cmd);
+int			ft_input_is_valid(char *s);
 
 
 

@@ -58,49 +58,6 @@ int		ft_cd(char **cmd)
 	return (1);
 }
 
-int		ft_env(char **cmd)
-{
-	char **env;
-	int	i;
-	
-	i = 0;
-	env = g_shell.set;
-	while (env[i])
-	{
-		printf("%s\n", env[i++]);
-	}
-	return (1);
-}
-
-int		ft_export(char **cmd)
-{
-	int	n;
-	int i;
-	int j;
-	char **env_var;
-
-	i = 0;
-	j = 0;
-	n = ft_array_len(g_shell.set);
-	//while (cmd[j++]);
-	env_var = malloc(n+2);
-	while(g_shell.set[i])
-	{
-		env_var[i] = g_shell.set[i];
-		i++;
-	}
-	// while (cmd[j++])
-	// {
-	// 	env_var[i++] = ft_strdup(cmd[j++]);
-	// }
-	env_var[i++] = ft_strdup(cmd[1]);
-	env_var[i] = 0;
-	free(g_shell.set);
-	g_shell.set = env_var;
-	printf("%s\n", "Wanna export?");
-	return (1);
-}
-
 int		ft_pwd(char **cmd)
 {
 	char *pwd;
@@ -108,6 +65,63 @@ int		ft_pwd(char **cmd)
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
 	free(pwd);
+	return (1);
+}
+
+int		ft_export(char **cmd)
+{
+	int	n;
+	int i;
+	char **env_var;
+
+	//i = 0;
+	n = ft_array_len(g_shell.set);
+	//env_var = malloc(n+2);
+	if (!cmd[1])
+	{
+		i = 0;
+		env_var = malloc(n);
+		env_var = g_shell.set;
+		while (env_var[i])
+		{
+			printf("declare -x %s\n", env_var[i++]);
+		}
+		return (1);
+		//printf("<--in no arg for export-->\n");
+	}
+	if (ft_input_is_valid(cmd[1]))
+	{
+		i = 1;
+		env_var = malloc(n+2);
+		while(g_shell.set[i])
+		{
+			env_var[i] = g_shell.set[i];
+			i++;
+		}
+		env_var[i++] = ft_strdup(cmd[1]);
+		env_var[i] = 0;
+		free(g_shell.set);
+		g_shell.set = env_var;
+	}
+	else{
+		printf("Input was invalid\n");
+	}
+	printf("%s\n", "-->in export-->\n");
+	return (1);
+}
+
+int		ft_env(char **cmd)
+{
+	char **env;
+	int	i;
+	
+	i = 0;
+	env = g_shell.set;
+	//printf("<--In env-->");
+	while (env[i])
+	{
+		printf("%s\n", env[i++]);
+	}
 	return (1);
 }
 
@@ -119,13 +133,13 @@ int		ft_fn_selector(char **cmd)
 		return (ft_cd(cmd));
 	else if (!ft_strncmp(cmd[0], "pwd", 4))
 		return (ft_pwd(cmd));
-	else if (!ft_strncmp(cmd[0], "exit", 5))
-		return (ft_exit(0,0));
-	else if (!ft_strncmp(cmd[0], "env", 4))
-		return (ft_env(cmd));
 	else if (!ft_strncmp(cmd[0], "export", 7))
 		return (ft_export(cmd));
 	else if (!ft_strncmp(cmd[0], "unset", 6))
 		return (ft_unset(cmd));
+	else if (!ft_strncmp(cmd[0], "env", 4))
+		return (ft_env(cmd));
+	else if (!ft_strncmp(cmd[0], "exit", 5))
+		return (ft_exit(0,0));
 	return (0);
 }

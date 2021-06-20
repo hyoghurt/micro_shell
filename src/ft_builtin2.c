@@ -10,12 +10,18 @@ int ft_input_is_valid(char *s)
         if (i == 0)
         {
             if (s[i] != '_' && !ft_isalpha(s[i]))
+            {
+                //printf("<-Invalid input->\n");
                 return (0);
+            }
         }
         else
         {
-            if (s[i] != '_' && !ft_isalnum(s[i]))
+            if (s[i] != '_' || !ft_isalnum(s[i]) || s[i] != '=')
+            {
+                //printf("<-Invalid input->\n");
                 return (0);
+            }
         }
         i++;
     }
