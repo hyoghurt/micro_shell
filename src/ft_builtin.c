@@ -26,6 +26,7 @@ int		ft_echo(char **cmd)
 	int		i;
 	int		n_flag;
 
+	//printf("%s\n", cmd[1]);
 	n_flag = 0;
 	if (!cmd[1])
 	{
@@ -68,45 +69,122 @@ int		ft_pwd(char **cmd)
 	return (1);
 }
 
+int		ft_var_is_present(char *s)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (g_shell.set[i])
+	{
+		j = 0;
+		while (g_shell.set[i][j] == s[j])
+		{
+			if (g_shell.set[i][j] == '=')
+			{
+				return (i);
+
+			}
+			j++;
+		}
+		i++;
+	}
+	return (-1);
+}
+
+void	ft_swap_var_val(int i, char *s)
+{
+	char *var;
+
+	free(g_shell.set[i]);
+	var = ft_strdup(s);
+	if (var == 0)
+		ft_exit(0,0);
+	g_shell.set[i] = var;
+}
+
+void ft_print_declare(char *s)
+{
+	int i;
+
+	i=0;
+	ft_putstr_fd("declare -x ",1);
+	while ( s[i] != '=')
+	{
+		write(1, &s[i],1);
+		i++;
+	}
+	write(1, &s[i],1);
+	write(1, "\"", 1);
+	i++;
+	while (s[i])
+	{
+		write(1, &s[i],1);
+		i++;
+	}
+	write(1, "\"\n", 2);
+}
+
 int		ft_export(char **cmd)
 {
 	int	n;
 	int i;
+	int j;
 	char **env_var;
 
-	//i = 0;
 	n = ft_array_len(g_shell.set);
 	//env_var = malloc(n+2);
+	j = 1;
 	if (!cmd[1])
 	{
 		i = 0;
-		env_var = malloc(n);
-		env_var = g_shell.set;
-		while (env_var[i])
-		{
-			printf("declare -x %s\n", env_var[i++]);
-		}
-		return (1);
-		//printf("<--in no arg for export-->\n");
-	}
-	if (ft_input_is_valid(cmd[1]))
-	{
-		i = 1;
-		env_var = malloc(n+2);
-		while(g_shell.set[i])
+		env_var = malloc((n+1) * sizeof(char *));
+		while (g_shell.set[i])
 		{
 			env_var[i] = g_shell.set[i];
 			i++;
 		}
-		env_var[i++] = ft_strdup(cmd[1]);
-		env_var[i] = 0;
-		free(g_shell.set);
-		g_shell.set = env_var;
+		env_var[i] = NULL;
+		i = 0;
+		ft_sort_export(env_var);
+		while (env_var[i])
+		{
+			ft_print_declare(env_var[i++]);
+		}
+		free(env_var);
+		g_shell.status = 0;
+		return (1);
+		//printf("<--in no arg for export-->\n");
 	}
-	else{
-		printf("Input was invalid\n");
+	while (cmd[j])
+	{
+		i = ft_var_is_present(cmd[j]);
+		if (i >= 0)
+		{
+			ft_swap_var_val(i, cmd[j]);
+		}
+		else if (ft_input_is_valid(cmd[j]))
+		{
+			i = 0;
+			n = ft_array_len(g_shell.set);
+			env_var = malloc((n+2) * sizeof(char *));
+			while(g_shell.set[i])
+			{
+				env_var[i] = g_shell.set[i];
+				i++;
+			}
+			env_var[i++] = ft_strdup(cmd[j]);
+			env_var[i] = 0;
+			free(g_shell.set);
+			g_shell.set = env_var;
+			g_shell.status = 0;
+		}
+		j++;
 	}
-	printf("%s\n", "-->in export-->\n");
+	// else{
+	// 	printf("Input was invalid\n");
+	// }
+	// printf("%s\n", "-->in export-->\n");
 	return (1);
 }
 
