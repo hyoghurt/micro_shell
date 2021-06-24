@@ -7,8 +7,6 @@ void	ft_redirect_out_2(void);
 
 void	ft_parser_redirect(void)
 {
-	char	*string;
-
 	if (*g_shell.line == '<')
 	{
 		g_shell.line++;

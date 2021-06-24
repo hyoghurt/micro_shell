@@ -14,7 +14,7 @@ char	*ft_string_check_env(char *line)
 	start = tmp;
 	while (*tmp)
 	{
-		if (*tmp == '$' && ft_check_set(*(tmp + 1)))
+		if (*tmp == '$' && ft_check_start_set(*(tmp + 1)))
 		{
 			ft_strjoin_redir_env(&result, &tmp, start);
 			start = tmp;

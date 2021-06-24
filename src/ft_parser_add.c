@@ -31,7 +31,7 @@ void	ft_free_string(char **string)
 	*string = 0;
 }
 
-int	ft_check_set(char check)
+int	ft_check_start_set(char check)
 {
 	if ((check == '_' || ft_isalpha(check)))
 		return (1);

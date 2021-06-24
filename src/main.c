@@ -50,8 +50,4 @@ void	ft_finish_executor(void)
 {
 	if (g_shell.cmd_table)
 		ft_cmdclear(&g_shell.cmd_table);
-	g_shell.fd_in = 0;
-	g_shell.fd_out = 1;
-	g_shell.fd_in_file = 0;
-	g_shell.fd_out_file = 0;
 }

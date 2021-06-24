@@ -62,6 +62,7 @@ int	ft_create_child_process(char **cmd)
 		if (!g_shell.pathtkn)
 		{
 			ft_print_string("minishell", "command not found", cmd[0]);
+			g_shell.status = 127;
 			return (1);
 		}
 		else
@@ -104,11 +105,13 @@ int	find_redirect_file(t_cmd *cmd)
 	if (cmd->fd_in < 0)
 	{
 		ft_print_string("minishell", cmd->fd_in_file, strerror(errno));
+		g_shell.status = 1;
 		return (1);
 	}
 	if (cmd->fd_out < 0)
 	{
 		ft_print_string("minishell", cmd->fd_out_file, strerror(errno));
+		g_shell.status = 1;
 		return (1);
 	}
 	return (0);

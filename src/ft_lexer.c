@@ -5,13 +5,18 @@ static int	ft_check_multiline(void);
 
 int	ft_lexer(void)
 {
+	int	res;
+
+	res = 0;
 	if (ft_check_pipe_error())
-		return (1);
-	if (ft_check_multiline())
-		return (1);
-	if (ft_check_lexer())
-		return (1);
-	return (0);
+		res = 1;
+	else if (ft_check_multiline())
+		res = 1;
+	else if (ft_check_lexer())
+		res = 1;
+	if (res == 1)
+		g_shell.status = 2;
+	return (res);
 }
 
 static int	ft_check_pipe_error(void)
@@ -45,9 +50,11 @@ static int	ft_check_multiline(void)
 
 	s = g_shell.line;
 	len = ft_strlen(s);
-	if (len)
+	if (len == 1 && s[0] == '\\')
+		return (1);
+	if (len > 1)
 	{
-		if (s[len - 1] == '\\')
+		if (s[len - 1] == '\\' && s[len - 2] != '\\')
 			return (1);
 	}
 	return (0);

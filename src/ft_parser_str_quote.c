@@ -1,18 +1,16 @@
 #include "minishell.h"
 
-static int	ft_check_ecran(char check);
-static void	ft_string_quote_one(char **string);
-static void	ft_string_quote_two(char **string, int f);
-
-void	ft_string_quote(char **string, int f)
+static int	ft_check_ecran(char c1, char c2)
 {
-	if (*g_shell.line == '\'')
-		ft_string_quote_one(string);
-	else
-		ft_string_quote_two(string, f);
+	if (c1 == '\\')
+	{
+		if (ft_strchr("\\$\"", c2))
+			return (1);
+	}
+	return (0);
 }
 
-static void	ft_string_quote_one(char **string)
+void	ft_string_quote_one(char **string)
 {
 	char	*start;
 
@@ -23,27 +21,20 @@ static void	ft_string_quote_one(char **string)
 	g_shell.line++;
 }
 
-static int	ft_check_ecran(char check)
-{
-	if (ft_strchr("\\$\"", check))
-		return (1);
-	return (0);
-}
-
-static void	ft_string_quote_two(char **string, int f)
+void	ft_string_quote_two(char **string, int f)
 {
 	char	*start;
 
 	start = ++g_shell.line;
 	while (*g_shell.line != '\"')
 	{
-		if (*g_shell.line == '$' && ft_check_set(*(g_shell.line + 1)) && f != 2)
+		if (ft_check_set(*g_shell.line, *(g_shell.line + 1)) && f != 2)
 		{
 			ft_content(string, start);
 			ft_string_env(string);
 			start = g_shell.line;
 		}
-		else if (*g_shell.line == '\\' && ft_check_ecran(*(g_shell.line + 1)))
+		else if (ft_check_ecran(*g_shell.line, *(g_shell.line + 1)))
 		{
 			ft_content(string, start);
 			ft_string_ecran(string);

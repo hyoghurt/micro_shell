@@ -9,6 +9,7 @@ SRC				=	main.c	\
 					ft_read_redirect_2.c \
 					ft_parser.c \
 					ft_parser_add.c \
+					ft_parser_add_2.c \
 					ft_parser_redirect.c \
 					ft_parser_str.c \
 					ft_parser_str_quote.c \

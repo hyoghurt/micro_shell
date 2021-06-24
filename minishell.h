@@ -119,12 +119,24 @@ void		ft_string_ecran(char **string);
 void		ft_string_status(char **string);
 void		ft_string_env(char **string);
 void		ft_string_word(char **string);
-void		ft_string_quote(char **string, int f);
+void		ft_string_quote_one(char **string);
+void		ft_string_quote_two(char **string, int f);
 void		ft_strjoin_string(char **string, char *content);
 void		ft_content(char **string, char *start);
-int			ft_check_set(char check);
+int			ft_check_start_set(char check);
 char		*ft_getset(char *str);
 char		*ft_value_getset(void);
+//parser_add_2
+void		ft_jump_space_and_pipe(void);
+void		ft_jump_space(void);
+int			ft_check_set(char c1, char c2);
+int			ft_check_status(char c1, char c2);
+//////////////////////////////////////////////
+
+
+
+
+//////////////////////////////////////////////
 //////////////////////////////////////////////
 void		ft_parser_redirect(void);
 void		ft_redir_content(char *string);
