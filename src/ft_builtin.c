@@ -1,49 +1,53 @@
 #include "minishell.h"
 
-static void		echo_out(char **str, int pos)
+static size_t	ft_check_n(char **args)
 {
-	int		starts_with;
-	int		ends_with;
-	int		str_len;
+	size_t	i;
+	size_t	j;
 
-	starts_with = IS_QUOTE(str[pos][0]);
-	str_len = (int)ft_strlen(str[pos]);
-	ends_with = IS_QUOTE(str[pos][str_len - 1]);
-	if (ends_with && starts_with)
-		ft_putnstr(str[pos] + 1, -1);
-	else if (ends_with)
-		ft_putnstr(str[pos], -1);
-	else if (starts_with)
-		ft_putstr_fd(str[pos + 1], 1);
-	else
-		ft_putstr_fd(str[pos],1);
-	if (str[pos + 1])
-		ft_putchar_fd(' ',1);
+	i = 0;
+	while (args[++i])
+	{
+		j = 0;
+		if (args[i][j++] == '-' && args[i][j] && args[i][j] == 'n')
+		{
+			while (args[i][j] == 'n')
+				j++;
+			if (args[i][j] && args[i][j] != 'n')
+				return (1);
+		}
+		else
+			return (i);
+	}
+	return (i);
 }
 
-int		ft_echo(char **cmd)
+int				ft_echo(char **args)
 {
-	int		i;
-	int		n_flag;
+	size_t	i;
+	int		n;
 
-	//printf("%s\n", cmd[1]);
-	n_flag = 0;
-	if (!cmd[1])
+	n = 1;
+	if (g_shell.status != 1)
+		g_shell.status = 0;
+	if (!args[1])
 	{
-		write(1, "\n", 1);
+		ft_putchar_fd('\n', 1);
 		return (1);
 	}
-	else if (cmd[1][0] == '-' && cmd[1][1] == 'n' && cmd[1][2] == '\0')
-		n_flag = 1;
-	i = 0;
-	if (n_flag)
-		++i;
-	while (cmd[++i])
+	if ((!ft_strncmp(args[1], " ", ft_strlen(args[1]))) && !args[2])
+		return (1);
+	i = ft_check_n(args);
+	n = i > 1 ? 0 : 1;
+	while (args[i])
 	{
-		echo_out(cmd, i);
-		if (!cmd[i + 1] && !n_flag)
-			ft_putchar_fd('\n',1);
+		ft_putstr_fd(args[i], 1);
+		i++;
+		if (args[i])
+			ft_putchar_fd(' ', 1);
 	}
+	if (n)
+		ft_putchar_fd('\n', 1);
 	return (1);
 }
 
@@ -62,8 +66,16 @@ int		ft_cd(char **cmd)
 int		ft_pwd(char **cmd)
 {
 	char *pwd;
+	int i;
+	int j;
 
 	pwd = getcwd(NULL, 0);
+	/// update $PWD and $OLDPWD
+	// i = ft_var_is_present((char *) PWD);
+	// j = ft_var_is_present((char *) OLDPWD);
+	// ft_swap_var_val(j, oldpwd);
+	// ft_swap_var_val(i, pwd);
+	///
 	printf("%s\n", pwd);
 	free(pwd);
 	return (1);
