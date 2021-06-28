@@ -19,8 +19,9 @@ SRC				=	main.c	\
 					ft_path.c \
 					ft_lexer.c \
 					ft_lexer_2.c \
-					ft_builtin.c \
+					ft_builtin1.c \
 					ft_builtin2.c \
+					ft_builtin3.c \
 					ft_fd.c \
 					ft_fd_2.c \
 					ft_executor.c \

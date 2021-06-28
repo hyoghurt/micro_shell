@@ -1,106 +1,127 @@
 #include "minishell.h"
 
-int ft_input_is_valid(char *s)
+int	ft_var_is_present(char *s)
 {
-    int i;
+	int	i;
+	int	j;
 
-    i = 0;
-    while (s[i] && s[i] != '=')
-    {
-        if (i == 0)
-        {
-            if (s[i] != '_' && !ft_isalpha(s[i]))
-            {
-                //printf("<-Invalid input->\n");
-                g_shell.status = 1;
-                return (0);
-            }
-        }
-        else
-        {
-            if (s[i] != '_' && !ft_isalnum(s[i]))
-            {
-                //printf("<-Invalid input->\n");
-                g_shell.status = 1;
-                return (0);
-            }
-        }
-        i++;
-    }
-    return (1);
+	i = 0;
+	while (g_shell.set[i])
+	{
+		j = 0;
+		while (g_shell.set[i][j] == s[j])
+		{
+			if (g_shell.set[i][j] == '=')
+			{
+				return (i);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (-1);
 }
 
-void    ft_clear_str(int j)
+void	ft_swap_var_val(int i, char *s)
 {
-    int i;
+	char	*var;
 
-    i = j;
-    printf("====================");
-    printf("This is ur Val %s", g_shell.set[j]);
-    printf("====================");
-    free(g_shell.set[j]);
-    j++;
-    while (g_shell.set[j])
-    {
-        g_shell.set[i] = g_shell.set[j];
-        i++;
-        j++;
-    }
-    g_shell.set[i] = 0;
-    //free(g_shell.set[i+1]);
+	free(g_shell.set[i]);
+	var = ft_strdup(s);
+	if (var == 0)
+		ft_exit(0, 0);
+	g_shell.set[i] = var;
 }
 
-int		ft_unset(char **cmd)
+void	ft_print_declare(char *s)
 {
-    int i;
-    int j;
-    size_t len;
+	int	i;
 
-    i = 0;
-    while (cmd[++i])
-    {
-        if (ft_input_is_valid(cmd[i]))
-        {
-            j = 0;
-            while (g_shell.set[j])
-            {
-                len = ft_strlen(cmd[i]);
-                if (!ft_strncmp(g_shell.set[j], cmd[i], len))
-                {
-                    if (g_shell.set[j][len] == '=')
-                        ft_clear_str(j);
-                }
-                j++;
-            }
-        }
+	i = 0;
+	ft_putstr_fd("declare -x ", 1);
+	while (s[i] != '=')
+	{
+		write(1, &s[i], 1);
+		i++;
+	}
+	write(1, &s[i], 1);
+	write(1, "\"", 1);
+	i++;
+	while (s[i])
+	{
+		write(1, &s[i], 1);
+		i++;
+	}
+	write(1, "\"\n", 2);
+}
 
-    }
+int	ft_export(char **cmd)
+{
+	int		n;
+	int		i;
+	int		j;
+	char	**env_var;
+
+	n = ft_array_len(g_shell.set);
+	j = 1;
+	if (!cmd[1])
+	{
+		i = 0;
+		env_var = malloc((n + 1) * sizeof(char *));
+		while (g_shell.set[i])
+		{
+			env_var[i] = g_shell.set[i];
+			i++;
+		}
+		env_var[i] = NULL;
+		i = 0;
+		ft_sort_export(env_var);
+		while (env_var[i])
+		{
+			ft_print_declare(env_var[i++]);
+		}
+		free(env_var);
+		g_shell.status = 0;
+		return (1);
+	}
+	while (cmd[j])
+	{
+		i = ft_var_is_present(cmd[j]);
+		if (i >= 0)
+		{
+			ft_swap_var_val(i, cmd[j]);
+		}
+		else if (ft_input_is_valid(cmd[j]))
+		{
+			i = 0;
+			n = ft_array_len(g_shell.set);
+			env_var = malloc((n + 2) * sizeof(char *));
+			while (g_shell.set[i])
+			{
+				env_var[i] = g_shell.set[i];
+				i++;
+			}
+			env_var[i++] = ft_strdup(cmd[j]);
+			env_var[i] = 0;
+			free(g_shell.set);
+			g_shell.set = env_var;
+			g_shell.status = 0;
+		}
+		j++;
+	}
 	return (1);
 }
 
-char        **ft_sort_export(char **str)
+int	ft_env(char **cmd)
 {
-    char    *sort;
-    int     i;
-    int     m;
-    if (str == NULL)
-        return (NULL);
-    i = 0;
-    m = 1;
-    while (str[i] != NULL)
-    {
-        m = 1;
-        while (str[i + m] != NULL)
-        {
-            if (ft_strncmp(str[i], str[i + m], ft_strlen(str[i])) > 0)
-            {
-                sort = str[i + m];
-                str[i + m] = str[i];
-                str[i] = sort;
-            }
-            m++;
-        }
-        i++;
-    }
-    return (str);
+	char	**env;
+	int		i;
+
+	i = 0;
+	env = g_shell.set;
+	while (env[i])
+	{
+		printf("%s\n", env[i++]);
+	}
+	return (1);
 }

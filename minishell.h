@@ -5,6 +5,7 @@
 
 # include "libft.h"
 # include <stdio.h>
+# include <string.h>        //Is this allowed?
 # include <unistd.h>		//isatty
 # include <stdlib.h>		//getenv
 # include <termcap.h>		//tgetent
@@ -180,6 +181,10 @@ int			ft_input_is_valid(char *s);
 char        **ft_sort_export(char **str);
 int			ft_var_is_present(char *s);
 void		ft_swap_var_val(int i, char *s);
+int			ft_echo(char **args);
+int			ft_cd(char **cmd);
+int			ft_export(char **cmd);
+int			ft_env(char **cmd);
 
 
 #endif
