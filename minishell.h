@@ -18,8 +18,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define PWD
-# define OLDPWD
+// # define PWD
+// # define OLDPWD
 
 //////////////////////////////////////////////
 typedef struct s_story

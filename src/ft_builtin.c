@@ -51,15 +51,63 @@ int				ft_echo(char **args)
 	return (1);
 }
 
+void ft_update_oldpwd(void)
+{
+	char *string;
+	char *full_oldpwd;
+	int i;
+
+	i = ft_var_is_present("OLDPWD=");
+	string = ft_getset("PWD");
+	full_oldpwd = ft_strjoin("OLDPWD=",string);
+	ft_swap_var_val(i,full_oldpwd);
+}
+
+void ft_update_pwd(void)
+{
+	char *pwd;
+	char *full_pwd;
+	int i;
+
+	//ft_update_oldpwd();
+	pwd = getcwd(NULL, 0);
+	/// update $PWD and $OLDPWD
+	i = ft_var_is_present("PWD=");
+	//j = ft_var_is_present("OLDPWD=");
+	//printf("i is %d\n", i);
+	//printf("PWD is %s\n", pwd);
+	// printf("##--in-- pos of PWD is %d##\n", i);
+	//j = ft_var_is_present("OLDPWD");
+	//ft_swap_var_val(j, oldpwd);
+	full_pwd = ft_strjoin("PWD=",pwd);
+	free(pwd);
+	ft_swap_var_val(i,full_pwd);
+}
+
 int		ft_cd(char **cmd)
 {
 	char *path;
 	int	ret;
 
+	g_shell.status = 0;
+	if (cmd && cmd[1] && cmd[2])
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		g_shell.status = 1;
+		return (1);
+	}
 	path = cmd[1];
 	ret = chdir(path);
 	if (ret == -1)
+	{
 		ft_print_string("minishell", path, strerror(errno));
+		g_shell.status = 1;
+		return (1);
+	}
+	///->
+	ft_update_oldpwd();
+	ft_update_pwd();
+	///->
 	return (1);
 }
 
@@ -68,13 +116,16 @@ int		ft_pwd(char **cmd)
 	char *pwd;
 	int i;
 	int j;
+	//char *PWD;
 
+	g_shell.status = 0;
 	pwd = getcwd(NULL, 0);
 	/// update $PWD and $OLDPWD
-	// i = ft_var_is_present((char *) PWD);
-	// j = ft_var_is_present((char *) OLDPWD);
-	// ft_swap_var_val(j, oldpwd);
-	// ft_swap_var_val(i, pwd);
+	//i = ft_var_is_present("PWD=");
+	// printf("##--in-- pos of PWD is %d##\n", i);
+	//j = ft_var_is_present("OLDPWD");
+	//ft_swap_var_val(j, oldpwd);
+	//ft_swap_var_val(i, pwd);
 	///
 	printf("%s\n", pwd);
 	free(pwd);
