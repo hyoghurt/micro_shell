@@ -8,6 +8,7 @@ void	ft_waitpid(void)
 	while (my_p)
 	{
 		waitpid(my_p->pid, &g_shell.status, 0);
+		g_shell.status = ((g_shell.status & 0xff00) >> 8);
 		my_p = my_p->next;
 	}
 	ft_pidclear(&g_shell.pid);
