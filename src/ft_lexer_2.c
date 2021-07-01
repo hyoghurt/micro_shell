@@ -13,7 +13,7 @@ int	ft_check_lexer(void)
 	while (*s)
 	{
 		if (*s == '\\')
-			s += 2;
+			s++;
 		else if (*s == '\'' && ft_lexer_quote(&s))
 			return (1);
 		else if (*s == '\"' && ft_lexer_quote_2(&s))
@@ -38,11 +38,8 @@ static int	ft_lexer_quote(char **s)
 	tmp++;
 	while (*tmp && *tmp != '\'')
 		tmp++;
-	while (*tmp && (*tmp == ' ' || *tmp == '\t'))
-		tmp++;
 	if (*tmp == '\0')
 		return (1);
-	tmp++;
 	*s = tmp;
 	return (0);
 }
@@ -59,11 +56,8 @@ static int	ft_lexer_quote_2(char **s)
 		if (*tmp && *tmp == '\"' && tmp != g_shell.line && *(tmp - 1) == '\\')
 			tmp++;
 	}
-	while (*tmp && (*tmp == ' ' || *tmp == '\t'))
-		tmp++;
 	if (*tmp == '\0')
 		return (1);
-	tmp++;
 	*s = tmp;
 	return (0);
 }
@@ -73,17 +67,16 @@ static int	ft_lexer_redirect(char **s)
 	char	*tmp;
 
 	tmp = *s;
+	if (*tmp == '<' && *(tmp + 1) == '<')
+		tmp++;
+	else if (*tmp == '>' && *(tmp + 1) == '>')
+		tmp++;
+	*s = tmp;
 	tmp++;
-	if (*tmp && *tmp == '<' && **(s) == '<')
-		tmp++;
-	else if (*tmp && *tmp == '>' && **(s) == '>')
-		tmp++;
 	while (*tmp && (*tmp == ' ' || *tmp == '\t'))
 		tmp++;
 	if (*tmp == '\0' || *tmp == '<' || *tmp == '>' || *tmp == '|' || *tmp == ';')
 		return (1);
-	tmp++;
-	*s = tmp;
 	return (0);
 }
 
