@@ -5,20 +5,17 @@
 
 # include "libft.h"
 # include <stdio.h>
-# include <string.h>        //Is this allowed?
-# include <unistd.h>		//isatty
-# include <stdlib.h>		//getenv
-# include <termcap.h>		//tgetent
-# include <errno.h>			//errno
+# include <string.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <termcap.h>
+# include <errno.h>
 # include <ncurses.h>
 # include <term.h>
 # include <signal.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
-// # define PWD
-// # define OLDPWD
-
 //////////////////////////////////////////////
 typedef struct s_story
 {
@@ -51,20 +48,24 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }					t_cmd;
 //////////////////////////////////////////////
+//dl - clear line
+//dc - cursor left
+//cd - del screen end kursor
+//sc - save position kursor
+//rc - restore position kursor
 typedef struct s_key
 {
 	char			*up;
 	char			*down;
 	char			*backsp;
-	/*clear line*/
 	char			*dl;
-	char			*dc;			//kursor left
-	char			*cd;			//delete screen end kursor
-	char			*sc;			//save position kursor
-	char			*rc;			//restore position kursor
+	char			*dc;
+	char			*cd;
+	char			*sc;
+	char			*rc;
 }					t_key;
 //////////////////////////////////////////////
-typedef struct		s_shell
+typedef struct s_shell
 {
 	struct termios	termios_p;
 	struct s_story	*story;
@@ -78,6 +79,7 @@ typedef struct		s_shell
 	char			**set;
 	char			*pathtkn;
 	int				status;
+	int				exit;
 	char			*user;
 	int				fd_in;
 	int				fd_out;
@@ -107,7 +109,7 @@ void		ft_start(void);
 void		ft_read(void);
 void		ft_key_up(void);
 void		ft_key_down(void);
-void		ft_key_backsp(char *s); 
+void		ft_key_backsp(char *s);
 //////////////////////////////////////////////
 int			ft_check_lexer(void);
 int			ft_lexer(void);
@@ -130,12 +132,6 @@ void		ft_jump_space_and_pipe(void);
 void		ft_jump_space(void);
 int			ft_check_set(char c1, char c2);
 int			ft_check_status(char c1, char c2);
-//////////////////////////////////////////////
-
-
-
-
-//////////////////////////////////////////////
 //////////////////////////////////////////////
 void		ft_parser_redirect(void);
 void		ft_redir_content(char *string);
@@ -165,23 +161,26 @@ void		ft_init_string(char **s);
 void		ft_free_string(char **string);
 void		ft_sig_ctrl_c(int sig);
 //////////////////////////////////////////////
+///my_debag
 void		debag_check_token(void);
 void		debag_check_status(void);
 void		debag_check_shell_line(void);
 void		debag_check_story(void);
 //////////////////////////////////////////////
 ///Built-in
-int			ft_fn_selector(char **cmd);
-int			ft_exit(char *msg, char *s);
-int			ft_unset(char **cmd);
+int			ft_builting(char **cmd);
 int			ft_input_is_valid(char *s);
-char        **ft_sort_export(char **str);
+char		**ft_sort_export(char **str);
 int			ft_var_is_present(char *s);
 void		ft_swap_var_val(int i, char *s);
+//////////////////////////////////////////////
 int			ft_echo(char **args);
 int			ft_cd(char **cmd);
+int			ft_pwd(void);
 int			ft_export(char **cmd);
+int			ft_unset(char **cmd);
 int			ft_env(char **cmd);
-
+int			ft_bl_exit(char **cmd);
+int			ft_exit(char *msg, char *s);
 
 #endif

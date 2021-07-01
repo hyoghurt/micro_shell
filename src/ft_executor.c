@@ -56,7 +56,7 @@ int	ft_create_child_process(char **cmd)
 {
 	if (!cmd)
 		return (0);
-	if (!ft_fn_selector(cmd))
+	if (!ft_builting(cmd))
 	{
 		g_shell.pathtkn = ft_path_token(cmd);
 		if (!g_shell.pathtkn)

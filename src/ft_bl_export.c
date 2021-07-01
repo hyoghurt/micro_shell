@@ -112,16 +112,29 @@ int	ft_export(char **cmd)
 	return (1);
 }
 
-int	ft_env(char **cmd)
+char    **ft_sort_export(char **str)
 {
-	char	**env;
-	int		i;
-
-	i = 0;
-	env = g_shell.set;
-	while (env[i])
-	{
-		printf("%s\n", env[i++]);
-	}
-	return (1);
+    char    *sort;
+    int     i;
+    int     m;
+    if (str == NULL)
+        return (NULL);
+    i = 0;
+    m = 1;
+    while (str[i] != NULL)
+    {
+        m = 1;
+        while (str[i + m] != NULL)
+        {
+            if (ft_strncmp(str[i], str[i + m], ft_strlen(str[i])) > 0)
+            {
+                sort = str[i + m];
+                str[i + m] = str[i];
+                str[i] = sort;
+            }
+            m++;
+        }
+        i++;
+    }
+    return (str);
 }

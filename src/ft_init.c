@@ -25,6 +25,7 @@ void	ft_init_struct(void)
 	g_shell.line = 0;
 	g_shell.cmd_table = 0;
 	g_shell.status = 0;
+	g_shell.exit = 0;
 	g_shell.set = 0;
 	g_shell.pathtkn = 0;
 	g_shell.pid = 0;

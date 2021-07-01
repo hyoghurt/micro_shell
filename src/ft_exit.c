@@ -34,22 +34,18 @@ void	ft_free_shell(void)
 		ft_story_clear(&g_shell.story);
 }
 
-int	ft_exit(char *msg, char *s)
+int	ft_exit(char *msg, char *error)
 {
-	int	ret;
-
-	ret = 0;
 	ft_free_shell();
 	if (msg)
 		ft_putstr_fd(msg, 2);
-	if (s)
+	if (error)
 	{
-		ret = ft_print_error();
-		if (ft_strncmp(s, "err_tcgetattr", 13))
+		g_shell.exit = ft_print_error();
+		if (ft_strncmp(error, "err_tcgetattr", 13))
 			exit (1);
 	}
-	if (tcsetattr(0, TCSANOW, &g_shell.termios_p) != 0)
-		ret = ft_print_error();
+	tcsetattr(0, TCSANOW, &g_shell.termios_p);
 	ft_putstr_fd("exit\n", 1);
-	exit (ret);
+	exit (g_shell.exit);
 }
