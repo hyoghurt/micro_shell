@@ -12,13 +12,14 @@ void	ft_free_bi(char **s)
 	size_t	i;
 
 	i = 0;
+	if (!s)
+		return ;
 	while (s[i])
 	{
 		free(s[i]);
 		i++;
 	}
 	free(s);
-	*s = 0;
 }
 
 void	ft_free_shell(void)

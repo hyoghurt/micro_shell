@@ -1,46 +1,17 @@
 #include "minishell.h"
 
-static size_t	ft_check_n(char **args)
-{
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	while (args[++i])
-	{
-		j = 0;
-		if (args[i][j++] == '-' && args[i][j] && args[i][j] == 'n')
-		{
-			while (args[i][j] == 'n')
-				j++;
-			if (args[i][j] && args[i][j] != 'n')
-				return (1);
-		}
-		else
-			return (i);
-	}
-	return (i);
-}
-
 int	ft_echo(char **args)
 {
 	size_t	i;
 	int		n;
 
 	n = 1;
-	if (g_shell.status != 1)
-		g_shell.status = 0;
-	if (!args[1])
+	i = 1;
+	while (args[i] && !ft_strncmp(args[i], "-n", 3))
 	{
-		ft_putchar_fd('\n', 1);
-		return (1);
+		i++;
+		n = 0;
 	}
-	if ((!ft_strncmp(args[1], " ", ft_strlen(args[1]))) && !args[2])
-		return (1);
-	i = ft_check_n(args);
-	//n = i > 1 ? 0 : 1;
-	if ((n = 1) > 1)
-	 	return 0;
 	while (args[i])
 	{
 		ft_putstr_fd(args[i], 1);
@@ -50,6 +21,7 @@ int	ft_echo(char **args)
 	}
 	if (n)
 		ft_putchar_fd('\n', 1);
+	g_shell.status = 0;
 	return (1);
 }
 

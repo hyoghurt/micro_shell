@@ -42,7 +42,7 @@ char	*ft_getset(char *str)
 				return (ft_strdup(tmp[i] + len + 1));
 		}
 	}
-	return (0);
+	return (ft_strdup(""));
 }
 
 char	*ft_value_getset(void)
