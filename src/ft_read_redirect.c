@@ -28,7 +28,6 @@ void	ft_redir_content(char *string)
 
 char	*ft_read_redir(char *string)
 {
-	char	buf[10];
 	char	*line;
 
 	ft_init_read_redir(&line);

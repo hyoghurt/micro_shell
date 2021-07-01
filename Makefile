@@ -39,9 +39,7 @@ CFLAGS			= -Wall -Wextra -Werror
 
 $(NAME):		$(OBJ)
 				make -C libft
-				$(CC) $(OBJ) -ltermcap -lncurses -lreadline -Llibft -lft -o $(NAME) 
-
-##-lncurses
+				$(CC) $(OBJ) -ltermcap -lncurses -Llibft -lft -o $(NAME) 
 
 $(OBJDIR):			
 				mkdir -p $@
