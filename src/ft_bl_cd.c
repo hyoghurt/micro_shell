@@ -38,6 +38,8 @@ int	ft_cd(char **cmd)
 		return (1);
 	}
 	path = cmd[1];
+	if (path == 0)
+		path = ft_getset("HOME");
 	ret = chdir(path);
 	if (ret == -1)
 	{
