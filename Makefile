@@ -51,7 +51,7 @@ $(OBJDIR):
 				mkdir -p $@
 
 $(OBJDIR)/%.o:	$(SRCDIR)/%.c | $(OBJDIR)
-				$(CC) -I. -Ilibft -c -MD $< -o $@
+				$(CC) $(CFLAGS) -I. -Ilibft -c -MD $< -o $@
 
 include $(wildcard $(OBJDIR)/*.d)
 

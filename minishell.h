@@ -140,7 +140,7 @@ char		*ft_string_check_env(char *line);
 int			ft_executor(void);
 int			ft_save_stdin_stdout(void);
 void		ft_restore_fd(void);
-int			ft_fd_start(t_cmd *cmd);
+int			ft_fd_start(void);
 int			ft_fd_end(t_cmd *cmd);
 int			ft_redirect(int one, int two);
 void		ft_fd_pipe(void);
@@ -179,7 +179,7 @@ int			ft_cd(char **cmd);
 int			ft_pwd(void);
 int			ft_export(char **cmd);
 int			ft_unset(char **cmd);
-int			ft_env(char **cmd);
+int			ft_env(void);
 int			ft_bl_exit(char **cmd);
 int			ft_exit(char *msg, char *s);
 //////

@@ -5,7 +5,7 @@ int	ft_exp_noargs(char **cmd, int n, int j)
 	int		i;
 	char	**env_var;
 
-	if (!cmd[1])
+	if (!cmd[j])
 	{
 		i = 0;
 		env_var = malloc((n + 1) * sizeof(char *));
@@ -57,7 +57,6 @@ void	ft_export_args_help(char **cmd, int n, int i, int j)
 void	ft_export_args(char **cmd, int n, int j)
 {
 	int		i;
-	char	**env_var;
 
 	while (cmd[j])
 	{

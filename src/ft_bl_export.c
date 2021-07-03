@@ -59,9 +59,7 @@ void	ft_print_declare(char *s)
 int	ft_export(char **cmd)
 {
 	int		n;
-	int		i;
 	int		j;
-	char	**env_var;
 
 	n = ft_array_len(g_shell.set);
 	j = 1;

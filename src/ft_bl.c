@@ -13,7 +13,7 @@ int	ft_builting(char **cmd)
 	else if (!ft_strncmp(cmd[0], "unset", 6))
 		return (ft_unset(cmd));
 	else if (!ft_strncmp(cmd[0], "env", 4))
-		return (ft_env(cmd));
+		return (ft_env());
 	else if (!ft_strncmp(cmd[0], "exit", 5))
 		return (ft_bl_exit(cmd));
 	return (0);

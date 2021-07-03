@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_fd_start(t_cmd *cmd)
+int	ft_fd_start(void)
 {
 	g_shell.std.fd_in = dup(g_shell.std.tmp_in);
 	if (g_shell.std.fd_in < 0)

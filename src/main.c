@@ -5,6 +5,8 @@ int		ft_check_line(void);
 
 int	main(int argc, char **argv, char **envp)
 {
+	if (argc != 1 || argv[1])
+		return (1);
 	ft_init(envp);
 	while (1)
 	{

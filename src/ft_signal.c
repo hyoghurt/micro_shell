@@ -2,7 +2,7 @@
 
 void	ft_sig_ctrl_c(int sig)
 {
-	if (!g_shell.pid)
+	if (sig == SIGINT && !g_shell.pid)
 	{
 		tcsetattr(0, TCSANOW, &g_shell.termios_p);
 		ft_putstr_fd("\n", 1);
