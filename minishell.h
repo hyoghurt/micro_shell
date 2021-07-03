@@ -182,5 +182,10 @@ int			ft_unset(char **cmd);
 int			ft_env(char **cmd);
 int			ft_bl_exit(char **cmd);
 int			ft_exit(char *msg, char *s);
+//////
+int			ft_exp_noargs(char **cmd, int n, int j);
+void		ft_export_args_help(char **cmd, int n, int i, int j);
+void		ft_export_args(char **cmd, int n, int j);
+void		ft_print_declare(char *s);
 
 #endif

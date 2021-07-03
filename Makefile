@@ -26,6 +26,7 @@ SRC				=	main.c	\
 					ft_bl_cd.c \
 					ft_bl_env.c \
 					ft_bl_export.c \
+					ft_bl_export2.c \
 					ft_bl_pwd.c \
 					ft_bl_unset.c \
 					ft_bl_exit.c \

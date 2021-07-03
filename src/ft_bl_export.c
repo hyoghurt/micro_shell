@@ -64,77 +64,35 @@ int	ft_export(char **cmd)
 
 	n = ft_array_len(g_shell.set);
 	j = 1;
-	if (!cmd[1])
-	{
-		i = 0;
-		env_var = malloc((n + 1) * sizeof(char *));
-		while (g_shell.set[i])
-		{
-			env_var[i] = g_shell.set[i];
-			i++;
-		}
-		env_var[i] = NULL;
-		i = 0;
-		ft_sort_export(env_var);
-		while (env_var[i])
-		{
-			ft_print_declare(env_var[i++]);
-		}
-		free(env_var);
-		g_shell.status = 0;
-		return (1);
-	}
-	while (cmd[j])
-	{
-		i = ft_var_is_present(cmd[j]);
-		if (i >= 0)
-		{
-			ft_swap_var_val(i, cmd[j]);
-		}
-		else if (ft_input_is_valid(cmd[j]))
-		{
-			i = 0;
-			n = ft_array_len(g_shell.set);
-			env_var = malloc((n + 2) * sizeof(char *));
-			while (g_shell.set[i])
-			{
-				env_var[i] = g_shell.set[i];
-				i++;
-			}
-			env_var[i++] = ft_strdup(cmd[j]);
-			env_var[i] = 0;
-			free(g_shell.set);
-			g_shell.set = env_var;
-			g_shell.status = 0;
-		}
-		j++;
-	}
+	ft_exp_noargs(cmd, n, j);
+	ft_export_args(cmd, n, j);
 	return (1);
 }
 
-char    **ft_sort_export(char **str)
+char	**ft_sort_export(char **str)
 {
-    char    *sort;
-    int     i;
-    int     m;
-    if (str == NULL)
-        return (NULL);
-    i = 0;
-    m = 1;
-    while (str[i] != NULL)
-    {
-        m = 1;
-        while (str[i + m] != NULL)
-        {
-            if (ft_strncmp(str[i], str[i + m], ft_strlen(str[i])) > 0)
-            {
-                sort = str[i + m];
-                str[i + m] = str[i];
-                str[i] = sort;
-            }
-            m++;
-        }
-        i++;
-    }
-    return (str);
+	char	*sort;
+	int		i;
+	int		m;
+
+	if (str == NULL)
+		return (NULL);
+	i = 0;
+	m = 1;
+	while (str[i] != NULL)
+	{
+		m = 1;
+		while (str[i + m] != NULL)
+		{
+			if (ft_strncmp(str[i], str[i + m], ft_strlen(str[i])) > 0)
+			{
+				sort = str[i + m];
+				str[i + m] = str[i];
+				str[i] = sort;
+			}
+			m++;
+		}
+		i++;
+	}
+	return (str);
 }
