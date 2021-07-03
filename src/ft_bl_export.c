@@ -35,24 +35,25 @@ void	ft_swap_var_val(int i, char *s)
 
 void	ft_print_declare(char *s)
 {
-	int	i;
-
-	i = 0;
 	ft_putstr_fd("declare -x ", 1);
-	while (s[i] != '=')
+	while (*s && *s != '=')
 	{
-		write(1, &s[i], 1);
-		i++;
+		write(1, s, 1);
+		s++;
 	}
-	write(1, &s[i], 1);
-	write(1, "\"", 1);
-	i++;
-	while (s[i])
+	if (*s)
 	{
-		write(1, &s[i], 1);
-		i++;
+		write(1, s, 1);
+		write(1, "\"", 1);
+		s++;
+		while (*s)
+		{
+			write(1, s, 1);
+			s++;
+		}
+		write(1, "\"", 1);
 	}
-	write(1, "\"\n", 2);
+	write(1, "\n", 1);
 }
 
 int	ft_export(char **cmd)
