@@ -3,6 +3,12 @@
 void	ft_finish_executor(void);
 int		ft_check_line(void);
 
+void	ft_syntax_error(void)
+{
+	ft_putstr_fd("minishell: syntax error\n", 2);
+	g_shell.status = 2;
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	if (argc != 1 || argv[1])
@@ -14,7 +20,7 @@ int	main(int argc, char **argv, char **envp)
 		while (ft_check_line())
 			ft_read();
 		if (ft_lexer())
-			ft_putstr_fd("minishell: syntax error\n", 2);
+			ft_syntax_error();
 		else
 		{
 			while (*g_shell.line)

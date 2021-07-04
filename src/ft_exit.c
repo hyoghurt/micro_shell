@@ -41,11 +41,10 @@ int	ft_exit(char *msg, char *error)
 		ft_putstr_fd(msg, 2);
 	if (error)
 	{
-		g_shell.exit = ft_print_error();
+		g_shell.status = ft_print_error();
 		if (ft_strncmp(error, "err_tcgetattr", 13))
 			exit (1);
 	}
 	tcsetattr(0, TCSANOW, &g_shell.termios_p);
-	ft_putstr_fd("exit\n", 1);
-	exit (g_shell.exit);
+	exit (g_shell.status);
 }

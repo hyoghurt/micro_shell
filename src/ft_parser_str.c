@@ -42,7 +42,6 @@ void	ft_string_status(char **string)
 	if (!content)
 		ft_free_string(string);
 	ft_strjoin_string(string, content);
-	g_shell.status = 0;
 }
 
 void	ft_string_env(char **string)

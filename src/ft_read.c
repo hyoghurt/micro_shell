@@ -30,7 +30,10 @@ void	ft_read_character(char *buf)
 	else if (ft_strncmp(buf, g_shell.key.down, 3) == 0)
 		ft_key_down();
 	else if (buf[0] == '\004' && ft_strlen(g_shell.line) == 0)
+	{
+		ft_putstr_fd("exit\n", 1);
 		ft_exit(0, 0);
+	}
 	else if (buf[0] == '\177')
 		ft_key_backsp(g_shell.line);
 	if ((buf[0] >= 32 && buf[0] <= 126) || (buf[0] >= 9 && buf[0] <= 13))

@@ -172,7 +172,7 @@ int			ft_builting(char **cmd);
 int			ft_input_is_valid(char *s);
 char		**ft_sort_export(char **str);
 int			ft_var_is_present(char *s);
-void		ft_swap_var_val(int i, char *s);
+void		ft_swap_val(int i, char *s);
 //////////////////////////////////////////////
 int			ft_echo(char **args);
 int			ft_cd(char **cmd);
@@ -183,9 +183,7 @@ int			ft_env(void);
 int			ft_bl_exit(char **cmd);
 int			ft_exit(char *msg, char *s);
 //////
-int			ft_exp_noargs(char **cmd, int n, int j);
-void		ft_export_args_help(char **cmd, int n, int i, int j);
-void		ft_export_args(char **cmd, int n, int j);
-void		ft_print_declare(char *s);
+void		ft_exp_no_args(void);
+void		ft_add_var(char *s);
 
 #endif

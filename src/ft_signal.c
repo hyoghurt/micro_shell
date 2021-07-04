@@ -12,4 +12,5 @@ void	ft_sig_ctrl_c(int sig)
 		g_shell.move_story = g_shell.story;
 		ft_set_prompt();
 	}
+	g_shell.status = 130;
 }

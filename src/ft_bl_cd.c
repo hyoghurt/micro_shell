@@ -68,9 +68,9 @@ void	ft_update_oldpwd(void)
 	if (!full_oldpwd)
 		ft_exit("minishell: update_oldpwd: malloc: ", "error");
 	if (i >= 0)
-		ft_swap_var_val(i, full_oldpwd);
-	//else
-	//write export full_oldpwd
+		ft_swap_val(i, full_oldpwd);
+	else
+		ft_add_var(full_oldpwd);
 }
 
 void	ft_update_pwd(void)
@@ -88,7 +88,7 @@ void	ft_update_pwd(void)
 	if (!full_pwd)
 		ft_exit("minishell: update_pwd: malloc: ", "error");
 	if (i >= 0)
-		ft_swap_var_val(i, full_pwd);
-	//else
-	//write export full_pwd
+		ft_swap_val(i, full_pwd);
+	else
+		ft_add_var(full_pwd);
 }

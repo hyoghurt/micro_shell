@@ -1,48 +1,7 @@
 #include "minishell.h"
 
-int	ft_input_is_valid(char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] && s[i] != '=')
-	{
-		if (i == 0)
-		{
-			if (s[i] != '_' && !ft_isalpha(s[i]))
-			{
-				g_shell.status = 1;
-				return (0);
-			}
-		}
-		else
-		{
-			if (s[i] != '_' && !ft_isalnum(s[i]))
-			{
-				g_shell.status = 1;
-				return (0);
-			}
-		}
-		i++;
-	}
-	return (1);
-}
-
-void	ft_clear_str(int j)
-{
-	int	i;
-
-	i = j;
-	free(g_shell.set[j]);
-	j++;
-	while (g_shell.set[j])
-	{
-		g_shell.set[i] = g_shell.set[j];
-		i++;
-		j++;
-	}
-	g_shell.set[i] = 0;
-}
+int		ft_input_is_valid(char *s);
+void	ft_clear_str(int j);
 
 int	ft_unset(char **cmd)
 {
@@ -68,5 +27,42 @@ int	ft_unset(char **cmd)
 			}
 		}
 	}
+	g_shell.status = 0;
 	return (1);
+}
+
+int	ft_input_is_valid(char *s)
+{
+	int	i;
+
+	i = 0;
+	if (s[i])
+	{
+		if (s[i] != '_' && !ft_isalpha(s[i]))
+			return (0);
+	}
+	i++;
+	while (s[i] && s[i] != '=')
+	{
+		if (s[i] != '_' && !ft_isalnum(s[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	ft_clear_str(int j)
+{
+	int	i;
+
+	i = j;
+	free(g_shell.set[j]);
+	j++;
+	while (g_shell.set[j])
+	{
+		g_shell.set[i] = g_shell.set[j];
+		i++;
+		j++;
+	}
+	g_shell.set[i] = 0;
 }
