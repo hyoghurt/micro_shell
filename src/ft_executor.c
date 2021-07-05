@@ -14,15 +14,9 @@ int	ft_executor(void)
 	ft_fd_start();
 	while (cmd)
 	{
-		if (ft_run_cmd(cmd))
-		{
-			ft_killpid();
-			ft_waitpid();
-			ft_restore_fd();
-			g_shell.status = 127;
-			return (0);
-			//break ;
-		}
+		ft_run_cmd(cmd);
+		if (cmd->next)
+			g_shell.status = 0;
 		cmd = cmd->next;
 	}
 	ft_restore_fd();
@@ -48,14 +42,7 @@ int	ft_run_cmd(t_cmd *cmd)
 		ft_redirect(cmd->fd_out, g_shell.std.fd_out);
 	ft_redirect(g_shell.std.fd_out, 1);
 	if (!flag)
-	{
-		if (ft_create_child_process(cmd->token))
-		{
-			//ft_killpid();
-			g_shell.status = 127;
-			return (0);
-		}
-	}
+		ft_create_child_process(cmd->token);
 	return (0);
 }
 
@@ -69,17 +56,12 @@ int	ft_create_child_process(char **cmd)
 		if (!g_shell.pathtkn)
 		{
 			ft_print_string("minishell", "command not found", cmd[0]);
-			//g_shell.status = 127;
+			g_shell.status = 127;
 			return (1);
 		}
-		else
-		{
-			if (ft_execve(cmd))
-				return (1);
-			free(g_shell.pathtkn);
-			g_shell.pathtkn = 0;
-		}
-		return (0);
+		ft_execve(cmd);
+		free(g_shell.pathtkn);
+		g_shell.pathtkn = 0;
 	}
 	return (0);
 }

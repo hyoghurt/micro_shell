@@ -85,6 +85,7 @@ typedef struct s_shell
 	int				fd_out;
 	char			*fd_in_file;
 	char			*fd_out_file;
+	int				flag;
 }					t_shell;
 //////////////////////////////////////////////
 t_shell		g_shell;
@@ -185,5 +186,6 @@ int			ft_exit(char *msg, char *s);
 //////
 void		ft_exp_no_args(void);
 void		ft_add_var(char *s);
+void	ft_finish_executor(void);
 
 #endif

@@ -58,4 +58,5 @@ void	ft_finish_executor(void)
 {
 	if (g_shell.cmd_table)
 		ft_cmdclear(&g_shell.cmd_table);
+	g_shell.cmd_table = 0;
 }
