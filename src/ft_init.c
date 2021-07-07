@@ -10,6 +10,7 @@ void	ft_init(char **envp)
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_sig_ctrl_c);
+	signal(SIGQUIT, ft_sig_ctrl_c);
 	ft_init_struct();
 	ft_init_termtype();
 	if (tcgetattr(0, &g_shell.termios_p) != 0)

@@ -147,7 +147,7 @@ int			ft_redirect(int one, int two);
 void		ft_fd_pipe(void);
 char		*ft_path_token(char **cmd);
 void		ft_waitpid(void);
-void		ft_killpid(void);
+void		ft_killpid(int sig);
 //////////////////////////////////////////////
 void		ft_init_termios(void);
 int			ft_set_prompt(void);
@@ -186,6 +186,6 @@ int			ft_exit(char *msg, char *s);
 //////
 void		ft_exp_no_args(void);
 void		ft_add_var(char *s);
-void	ft_finish_executor(void);
+void		ft_finish_executor(void);
 
 #endif

@@ -25,6 +25,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			while (*g_shell.line)
 			{
+				g_shell.flag = 0;
 				ft_parser();
 				if (g_shell.cmd_table)
 					ft_executor();

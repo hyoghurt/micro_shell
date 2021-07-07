@@ -8,6 +8,7 @@ void	ft_read(void)
 
 	ft_init_termios();
 	ft_set_prompt();
+	g_shell.flag = 0;
 	while (1)
 	{
 		ft_memset(buf, 0, 10);

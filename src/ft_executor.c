@@ -76,8 +76,6 @@ int	ft_execve(char **cmd)
 		ft_print_string("minishell", "pid", strerror(errno));
 	if (pid == 0)
 	{
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
 		if (execve(g_shell.pathtkn, cmd, g_shell.set) == -1)
 			ft_print_string("minishell", "execve", strerror(errno));
 		exit(1);

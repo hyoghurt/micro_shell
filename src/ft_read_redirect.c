@@ -69,7 +69,7 @@ int	ft_rtn_str_read_ch(char **line)
 		ft_exit("minishell: read_redir:", "error");
 	if (buf[0] == '\004' && ft_strlen(*line) == 0)
 	{
-		ft_putstr_fd("minishell: end string C-d", 1);
+		ft_putstr_fd("minishell: end string C-D", 1);
 		free(*line);
 		*line = 0;
 		return (1);
