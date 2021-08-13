@@ -1,4 +1,4 @@
-# bbshk
+# micro_shell
 Реализация оболочки **bash**  
 
 сборка: `make`  
